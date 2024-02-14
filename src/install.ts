@@ -18,25 +18,10 @@ async function init(): Promise<void> {
 }
 
 async function install(): Promise<void> {
-  if (core.getInput('sf-cli-version')) {
-    await npmInstall()
-  } else {
-    await installNewest()
-  }
-  await execute('./tmp/sf/bin/sf --version && ./tmp/sf/bin/sf plugins --core')
-}
-
-async function npmInstall(): Promise<void> {
-  const version = core.getInput('sf-cli-version')
+  const version = core.getInput('sf-cli-version', { required: true })
   if (!version) {
-    core.setFailed(`missing version number`)
+    core.setFailed(`missing version number, provide 'sf-cli-version' with 'latest' or a specific version number`)
   }
   await execute(`npm install -g @salesforce/cli@${version}`)
-}
-
-async function installNewest(): Promise<void> {
-  const URL = 'https://developer.salesforce.com/media/salesforce-cli/sf/channels/stable/sf-linux-x64.tar.xz'
-  await execute(`wget ${URL} -q -O ./tmp/sf-linux-x64.tar.xz`)
-  await execute('tar xJf ./tmp/sf-linux-x64.tar.xz -C ./tmp/sf --strip-components 1')
-  await execute('echo "./tmp/sf/bin" >> $GITHUB_PATH')
+  await execute('sf --version && sf plugins --core')
 }

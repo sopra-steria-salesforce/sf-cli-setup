@@ -28,9 +28,7 @@ function authenticate(): void {
 
 async function authenticateAuthUrl(): Promise<void> {
   fs.writeFileSync('./tmp/sfdx_auth.txt', core.getInput('auth-url'))
-  await execute(
-    './tmp/sf/bin/sf org login sfdx-url --sfdx-url-file ./tmp/sfdx_auth.txt --set-default-dev-hub --set-default'
-  )
+  await execute('sf org login sfdx-url --sfdx-url-file ./tmp/sfdx_auth.txt --set-default-dev-hub --set-default')
   await execute('rm -rf ./tmp/sfdx_auth.txt')
 }
 
@@ -44,15 +42,13 @@ async function authenticateJwt(): Promise<void> {
     fs.writeFileSync('./tmp/server.key', Buffer.from(core.getInput('private-key-base64'), 'base64').toString())
   }
 
-  await execute(
-    `./tmp/sf/bin/sf org login jwt --username ${user} --client-id ${client_id} --jwt-key-file ./tmp/server.key`
-  )
+  await execute(`sf org login jwt --username ${user} --client-id ${client_id} --jwt-key-file ./tmp/server.key`)
 }
 
 async function authenticateAccessToken(): Promise<void> {
   const token = core.getInput('access-token')
   const url = core.getInput('instance-url')
   await execute(
-    `echo ${token} | ./tmp/sf/bin/sf org login access-token --set-default-dev-hub --set-default --no-prompt --instance-url ${url}`
+    `echo ${token} | sf org login access-token --set-default-dev-hub --set-default --no-prompt --instance-url ${url}`
   )
 }
