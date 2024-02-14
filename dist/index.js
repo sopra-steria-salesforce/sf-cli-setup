@@ -4014,9 +4014,9 @@ function authenticate() {
     }
 }
 async function authenticateAuthUrl() {
-    fs_1.default.writeFileSync('/tmp/sfdx_auth.txt', core.getInput('auth-url'));
-    await (0, helper_1.execute)('./tmp/sf/bin/sf org login sfdx-url --sfdx-url-file /tmp/sfdx_auth.txt --set-default-dev-hub --set-default');
-    await (0, helper_1.execute)('rm -rf /tmp/sfdx_auth.txt');
+    fs_1.default.writeFileSync('./tmp/sfdx_auth.txt', core.getInput('auth-url'));
+    await (0, helper_1.execute)('./tmp/sf/bin/sf org login sfdx-url --sfdx-url-file ./tmp/sfdx_auth.txt --set-default-dev-hub --set-default');
+    await (0, helper_1.execute)('rm -rf ./tmp/sfdx_auth.txt');
 }
 async function authenticateJwt() {
     const user = core.getInput('username');
@@ -4029,8 +4029,8 @@ async function authenticateJwt() {
         const base64decoded = Buffer.from(core.getInput('private-key-base64'), 'base64');
         private_key = base64decoded.toString();
     }
-    fs_1.default.writeFileSync('/tmp/server.key', private_key);
-    await (0, helper_1.execute)(`./tmp/sf/bin/sf org login jwt --username ${user} --client-id ${client_id} --jwt-key-file /tmp/server.key`);
+    fs_1.default.writeFileSync('./tmp/server.key', private_key);
+    await (0, helper_1.execute)(`./tmp/sf/bin/sf org login jwt --username ${user} --client-id ${client_id} --jwt-key-file ./tmp/server.key`);
 }
 async function authenticateAccessToken() {
     const token = core.getInput('access-token');

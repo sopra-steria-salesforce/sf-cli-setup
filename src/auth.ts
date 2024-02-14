@@ -27,11 +27,11 @@ function authenticate(): void {
 }
 
 async function authenticateAuthUrl(): Promise<void> {
-  fs.writeFileSync('/tmp/sfdx_auth.txt', core.getInput('auth-url'))
+  fs.writeFileSync('./tmp/sfdx_auth.txt', core.getInput('auth-url'))
   await execute(
-    './tmp/sf/bin/sf org login sfdx-url --sfdx-url-file /tmp/sfdx_auth.txt --set-default-dev-hub --set-default'
+    './tmp/sf/bin/sf org login sfdx-url --sfdx-url-file ./tmp/sfdx_auth.txt --set-default-dev-hub --set-default'
   )
-  await execute('rm -rf /tmp/sfdx_auth.txt')
+  await execute('rm -rf ./tmp/sfdx_auth.txt')
 }
 
 async function authenticateJwt(): Promise<void> {
@@ -45,9 +45,9 @@ async function authenticateJwt(): Promise<void> {
     private_key = base64decoded.toString()
   }
 
-  fs.writeFileSync('/tmp/server.key', private_key)
+  fs.writeFileSync('./tmp/server.key', private_key)
   await execute(
-    `./tmp/sf/bin/sf org login jwt --username ${user} --client-id ${client_id} --jwt-key-file /tmp/server.key`
+    `./tmp/sf/bin/sf org login jwt --username ${user} --client-id ${client_id} --jwt-key-file ./tmp/server.key`
   )
 }
 
