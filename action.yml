@@ -1,23 +1,36 @@
-name: 'The name of your action here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'Salesforce CLI Setup Helper'
+author: sopra-steria-salesforce
+description: 'This action allows to use Salesforce SF CLI from GitHub Actions'
 
-# Add your action's branding here. This will appear on the GitHub Marketplace.
 branding:
-  icon: 'heart'
-  color: 'red'
+  icon: 'terminal'
+  color: 'purple'
 
-# Define your inputs here.
 inputs:
-  milliseconds:
-    description: 'Your input description here'
-    required: true
-    default: '1000'
-
-# Define your outputs here.
-outputs:
-  time:
-    description: 'Your output description here'
+  sf-cli-version:
+    description: sf cli version number
+    required: false
+  auth-url:
+    description: The auth-url to be used in the auth-url authentication flow
+    required: false
+  username:
+    description: The username to be used in the jwt authentication flow
+    required: false
+  client-id:
+    description: The client id to be used in the jwt authentication flow
+    required: false
+  private-key:
+    description: The private key to be used in the jwt authentication flow
+    required: false
+  private-key-base64:
+    description: The base64 encoded private key to be used in the jwt authentication flow
+    required: false
+  access-token:
+    description: The access token to be used in the access-token flow
+    required: false
+  instance-url:
+    description: The instance url be used in the access-token flow
+    required: false
 
 runs:
   using: node20
