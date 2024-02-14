@@ -4015,7 +4015,7 @@ function authenticate() {
 }
 async function authenticateAuthUrl() {
     fs_1.default.writeFileSync('./tmp/sfdx_auth.txt', core.getInput('auth-url'));
-    await (0, helper_1.execute)('./tmp/sf/bin/sf org login sfdx-url --sfdx-url-file ./tmp/sfdx_auth.txt --set-default-dev-hub --set-default');
+    await (0, helper_1.execute)('sf org login sfdx-url --sfdx-url-file ./tmp/sfdx_auth.txt --set-default-dev-hub --set-default');
     await (0, helper_1.execute)('rm -rf ./tmp/sfdx_auth.txt');
 }
 async function authenticateJwt() {
@@ -4028,12 +4028,12 @@ async function authenticateJwt() {
     else if (core.getInput('private-key-base64')) {
         fs_1.default.writeFileSync('./tmp/server.key', Buffer.from(core.getInput('private-key-base64'), 'base64').toString());
     }
-    await (0, helper_1.execute)(`./tmp/sf/bin/sf org login jwt --username ${user} --client-id ${client_id} --jwt-key-file ./tmp/server.key`);
+    await (0, helper_1.execute)(`sf org login jwt --username ${user} --client-id ${client_id} --jwt-key-file ./tmp/server.key`);
 }
 async function authenticateAccessToken() {
     const token = core.getInput('access-token');
     const url = core.getInput('instance-url');
-    await (0, helper_1.execute)(`echo ${token} | ./tmp/sf/bin/sf org login access-token --set-default-dev-hub --set-default --no-prompt --instance-url ${url}`);
+    await (0, helper_1.execute)(`echo ${token} | sf org login access-token --set-default-dev-hub --set-default --no-prompt --instance-url ${url}`);
 }
 
 
@@ -4137,26 +4137,12 @@ async function init() {
     await (0, helper_1.execute)('mkdir -p tmp/sf');
 }
 async function install() {
-    if (core.getInput('sf-cli-version')) {
-        await npmInstall();
-    }
-    else {
-        await installNewest();
-    }
-    await (0, helper_1.execute)('./tmp/sf/bin/sf --version && ./tmp/sf/bin/sf plugins --core');
-}
-async function npmInstall() {
-    const version = core.getInput('sf-cli-version');
+    const version = core.getInput('sf-cli-version', { required: true });
     if (!version) {
-        core.setFailed(`missing version number`);
+        core.setFailed(`missing version number, provide 'sf-cli-version' with 'latest' or a specific version number`);
     }
     await (0, helper_1.execute)(`npm install -g @salesforce/cli@${version}`);
-}
-async function installNewest() {
-    const URL = 'https://developer.salesforce.com/media/salesforce-cli/sf/channels/stable/sf-linux-x64.tar.xz';
-    await (0, helper_1.execute)(`wget ${URL} -q -O ./tmp/sf-linux-x64.tar.xz`);
-    await (0, helper_1.execute)('tar xJf ./tmp/sf-linux-x64.tar.xz -C ./tmp/sf --strip-components 1');
-    await (0, helper_1.execute)('echo "./tmp/sf/bin" >> $GITHUB_PATH');
+    await (0, helper_1.execute)('sf --version && sf plugins --core');
 }
 
 
