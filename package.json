@@ -27,9 +27,7 @@
     "lint": "npx eslint . -c ./.github/linters/.eslintrc.yml",
     "package": "ncc build src/index.ts --license licenses.txt",
     "package:watch": "npm run package -- --watch",
-    "all": "npm run format:write && npm run lint && npm run package",
-    "postinstall": "husky install && chmod +x .husky/*",
-    "precommit": "npm run all"
+    "all": "npm run format:write && npm run lint && npm run package"
   },
   "license": "MIT",
   "dependencies": {
@@ -42,8 +40,6 @@
     "@typescript-eslint/parser": "^6.21.0",
     "@vercel/ncc": "^0.38.1",
     "eslint": "^8.56.0",
-    "husky": "7.0.4",
-    "pre-commit": "^1.2.2",
     "eslint-plugin-github": "^4.10.1",
     "eslint-plugin-jsonc": "^2.13.0",
     "eslint-plugin-prettier": "^5.1.3",
