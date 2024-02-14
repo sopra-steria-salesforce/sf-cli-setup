@@ -31,7 +31,7 @@ async function npmInstall(): Promise<void> {
   if (!version) {
     core.setFailed(`missing version number`)
   }
-  await execute(`npm install -g sfdx-cli@${version}`)
+  await execute(`npm install -g @salesforce/cli@${version}`)
 }
 
 async function installNewest(): Promise<void> {

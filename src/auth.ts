@@ -39,13 +39,11 @@ async function authenticateJwt(): Promise<void> {
   const client_id = core.getInput('client-id')
   let private_key = ''
   if (core.getInput('private-key')) {
-    private_key = core.getInput('private-key')
+    fs.writeFileSync('./tmp/server.key', core.getInput('private-key'))
   } else if (core.getInput('private-key-base64')) {
-    const base64decoded = Buffer.from(core.getInput('private-key-base64'), 'base64')
-    private_key = base64decoded.toString()
+    fs.writeFileSync('./tmp/server.key', Buffer.from(core.getInput('private-key-base64'), 'base64').toString())
   }
 
-  fs.writeFileSync('./tmp/server.key', private_key)
   await execute(
     `./tmp/sf/bin/sf org login jwt --username ${user} --client-id ${client_id} --jwt-key-file ./tmp/server.key`
   )
