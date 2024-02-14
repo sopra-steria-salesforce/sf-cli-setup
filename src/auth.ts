@@ -42,7 +42,9 @@ async function authenticateJwt(): Promise<void> {
     fs.writeFileSync('./tmp/server.key', Buffer.from(core.getInput('private-key-base64'), 'base64').toString())
   }
 
-  await execute(`sf org login jwt --username ${user} --client-id ${client_id} --jwt-key-file ./tmp/server.key`)
+  await execute(
+    `sf org login jwt --username ${user} --client-id ${client_id} --jwt-key-file ./tmp/server.key --set-default-dev-hub --set-default`
+  )
 }
 
 async function authenticateAccessToken(): Promise<void> {

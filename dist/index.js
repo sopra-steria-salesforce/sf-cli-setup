@@ -4028,7 +4028,7 @@ async function authenticateJwt() {
     else if (core.getInput('private-key-base64')) {
         fs_1.default.writeFileSync('./tmp/server.key', Buffer.from(core.getInput('private-key-base64'), 'base64').toString());
     }
-    await (0, helper_1.execute)(`sf org login jwt --username ${user} --client-id ${client_id} --jwt-key-file ./tmp/server.key`);
+    await (0, helper_1.execute)(`sf org login jwt --username ${user} --client-id ${client_id} --jwt-key-file ./tmp/server.key --set-default-dev-hub --set-default`);
 }
 async function authenticateAccessToken() {
     const token = core.getInput('access-token');
