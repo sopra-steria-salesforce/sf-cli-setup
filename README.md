@@ -49,20 +49,53 @@ This action allows to use the Salesforce sf cli from GitHub Actions, and easily 
 
 ## Example usage
 
+## auth-url
+
 ```yaml
 name: SF Test Run on Push
-
-on: [push]
-
+on: push
 jobs:
   test:
     runs-on: ubuntu-latest
-
     steps:
       - uses: sopra-steria-salesforce/sf-cli-setup@v1
         with:
-          auth-url: ${{ secrets.YOUR_SECRET }}
           sf-cli-version: 2.27.6
-      - name: Run Tests
-        run: sf force apex test run -l RunLocalTests -w 30
+          auth-url: ${{ secrets.YOUR_SECRET }}
+      - run: sf apex test run -l RunLocalTests -w 30
+```
+
+## jwt
+
+```yaml
+name: SF Test Run on Push
+on: push
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: sopra-steria-salesforce/sf-cli-setup@v1
+        with:
+          sf-cli-version: latest
+          username: ${{ secrets.USERNAME }}
+          client-id: ${{ secrets.CLIENT_ID }}
+          private-key-base64: ${{ secrets.PRIVATE_KEY }}
+      - run: sf apex test run -l RunLocalTests -w 30
+```
+
+## no auth
+
+```yaml
+name: SF Test Run on Push
+on: push
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: sopra-steria-salesforce/sf-cli-setup@v1
+        with:
+          sf-cli-version: 2.27.6
+      - run:
+          echo ${{ secrets.ACCESS_TOKEN }} | sf org login access-token --set-default-dev-hub --set-default --no-prompt
+          --instance-url ${{ env.INSTANCE }}
 ```
