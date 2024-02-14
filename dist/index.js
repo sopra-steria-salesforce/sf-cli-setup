@@ -4156,7 +4156,7 @@ async function npmInstall() {
 }
 async function installNewest() {
     const URL = 'https://developer.salesforce.com/media/salesforce-cli/sf/channels/stable/sf-linux-x64.tar.xz';
-    await (0, helper_1.execute)(`wget ${URL} -q -O sf-linux-x64.tar.xz -P /tmp`);
+    await (0, helper_1.execute)(`wget ${URL} -q -O ./tmp/sf-linux-x64.tar.xz`);
     await (0, helper_1.execute)('tar xJf ./tmp/sf-linux-x64.tar.xz -C ./tmp/sf --strip-components 1');
     await (0, helper_1.execute)('echo "./tmp/sf/bin" >> $GITHUB_PATH');
 }

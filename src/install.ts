@@ -36,7 +36,7 @@ async function npmInstall(): Promise<void> {
 
 async function installNewest(): Promise<void> {
   const URL = 'https://developer.salesforce.com/media/salesforce-cli/sf/channels/stable/sf-linux-x64.tar.xz'
-  await execute(`wget ${URL} -q -O sf-linux-x64.tar.xz -P /tmp`)
+  await execute(`wget ${URL} -q -O ./tmp/sf-linux-x64.tar.xz`)
   await execute('tar xJf ./tmp/sf-linux-x64.tar.xz -C ./tmp/sf --strip-components 1')
   await execute('echo "./tmp/sf/bin" >> $GITHUB_PATH')
 }
