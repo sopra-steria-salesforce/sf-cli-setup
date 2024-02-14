@@ -23,7 +23,7 @@ async function install(): Promise<void> {
   } else {
     await installNewest()
   }
-  await execute('sf --version && sf plugins --core')
+  await execute('./tmp/sf/bin/sf --version && ./tmp/sf/bin/sf plugins --core')
 }
 
 async function npmInstall(): Promise<void> {

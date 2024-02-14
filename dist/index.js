@@ -4015,7 +4015,7 @@ function authenticate() {
 }
 async function authenticateAuthUrl() {
     fs_1.default.writeFileSync('/tmp/sfdx_auth.txt', core.getInput('auth-url'));
-    await (0, helper_1.execute)('sf org login sfdx-url --sfdx-url-file /tmp/sfdx_auth.txt --set-default-dev-hub --set-default');
+    await (0, helper_1.execute)('./tmp/sf/bin/sf org login sfdx-url --sfdx-url-file /tmp/sfdx_auth.txt --set-default-dev-hub --set-default');
     await (0, helper_1.execute)('rm -rf /tmp/sfdx_auth.txt');
 }
 async function authenticateJwt() {
@@ -4030,12 +4030,12 @@ async function authenticateJwt() {
         private_key = base64decoded.toString();
     }
     fs_1.default.writeFileSync('/tmp/server.key', private_key);
-    await (0, helper_1.execute)(`sf org login jwt --username ${user} --client-id ${client_id} --jwt-key-file /tmp/server.key`);
+    await (0, helper_1.execute)(`./tmp/sf/bin/sf org login jwt --username ${user} --client-id ${client_id} --jwt-key-file /tmp/server.key`);
 }
 async function authenticateAccessToken() {
     const token = core.getInput('access-token');
     const url = core.getInput('instance-url');
-    await (0, helper_1.execute)(`echo ${token} | sf org login access-token --set-default-dev-hub --set-default --no-prompt --instance-url ${url}`);
+    await (0, helper_1.execute)(`echo ${token} | ./tmp/sf/bin/sf org login access-token --set-default-dev-hub --set-default --no-prompt --instance-url ${url}`);
 }
 
 
@@ -4145,7 +4145,7 @@ async function install() {
     else {
         await installNewest();
     }
-    await (0, helper_1.execute)('sf --version && sf plugins --core');
+    await (0, helper_1.execute)('./tmp/sf/bin/sf --version && ./tmp/sf/bin/sf plugins --core');
 }
 async function npmInstall() {
     const version = core.getInput('sf-cli-version');
