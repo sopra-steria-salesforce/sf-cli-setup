@@ -4023,13 +4023,11 @@ async function authenticateJwt() {
     const client_id = core.getInput('client-id');
     let private_key = '';
     if (core.getInput('private-key')) {
-        private_key = core.getInput('private-key');
+        fs_1.default.writeFileSync('./tmp/server.key', core.getInput('private-key'));
     }
     else if (core.getInput('private-key-base64')) {
-        const base64decoded = Buffer.from(core.getInput('private-key-base64'), 'base64');
-        private_key = base64decoded.toString();
+        fs_1.default.writeFileSync('./tmp/server.key', Buffer.from(core.getInput('private-key-base64'), 'base64').toString());
     }
-    fs_1.default.writeFileSync('./tmp/server.key', private_key);
     await (0, helper_1.execute)(`./tmp/sf/bin/sf org login jwt --username ${user} --client-id ${client_id} --jwt-key-file ./tmp/server.key`);
 }
 async function authenticateAccessToken() {
@@ -4152,7 +4150,7 @@ async function npmInstall() {
     if (!version) {
         core.setFailed(`missing version number`);
     }
-    await (0, helper_1.execute)(`npm install -g sfdx-cli@${version}`);
+    await (0, helper_1.execute)(`npm install -g @salesforce/cli@${version}`);
 }
 async function installNewest() {
     const URL = 'https://developer.salesforce.com/media/salesforce-cli/sf/channels/stable/sf-linux-x64.tar.xz';
