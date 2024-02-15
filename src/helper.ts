@@ -2,21 +2,24 @@ import * as exec from '@actions/exec'
 import * as core from '@actions/core'
 
 export async function execute(cmd: string, params: string[] = []): Promise<void> {
+  let exitCode = 0
+  let message = ''
   await exec.exec(cmd, params).then(res => {
-    if (res !== 0) {
-      core.info(JSON.stringify(res))
-    } else {
-      core.setFailed(JSON.stringify(res))
-    }
+    exitCode = res
   })
-}
+  const options: exec.ExecOptions = {}
+  options.listeners = {
+    stdout: (data: Buffer) => {
+      message = data.toString()
+    },
+    stderr: (data: Buffer) => {
+      message = data.toString()
+    }
+  }
 
-const options: exec.ExecOptions = {}
-options.listeners = {
-  stdout: (data: Buffer) => {
-    core.info(data.toString())
-  },
-  stderr: (data: Buffer) => {
-    core.setFailed(data.toString())
+  if (exitCode === 0) {
+    core.info(message)
+  } else {
+    core.setFailed(message)
   }
 }

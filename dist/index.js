@@ -26055,25 +26055,28 @@ exports.execute = void 0;
 const exec = __importStar(__nccwpck_require__(1514));
 const core = __importStar(__nccwpck_require__(2186));
 async function execute(cmd, params = []) {
+    let exitCode = 0;
+    let message = '';
     await exec.exec(cmd, params).then(res => {
-        if (res !== 0) {
-            core.info(JSON.stringify(res));
-        }
-        else {
-            core.setFailed(JSON.stringify(res));
-        }
+        exitCode = res;
     });
+    const options = {};
+    options.listeners = {
+        stdout: (data) => {
+            message = data.toString();
+        },
+        stderr: (data) => {
+            message = data.toString();
+        }
+    };
+    if (exitCode === 0) {
+        core.info(message);
+    }
+    else {
+        core.setFailed(message);
+    }
 }
 exports.execute = execute;
-const options = {};
-options.listeners = {
-    stdout: (data) => {
-        core.info(data.toString());
-    },
-    stderr: (data) => {
-        core.setFailed(data.toString());
-    }
-};
 
 
 /***/ }),
