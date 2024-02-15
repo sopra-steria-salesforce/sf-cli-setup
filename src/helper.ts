@@ -7,10 +7,10 @@ export async function execute(cmd: string, params: string[] = []): Promise<void>
 
 const options: exec.ExecOptions = {}
 options.listeners = {
-  stdout: data => {
+  stdout: (data: Buffer) => {
     core.info(data.toString())
   },
-  stderr: data => {
+  stderr: (data: Buffer) => {
     core.setFailed(data.toString())
   }
 }

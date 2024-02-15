@@ -26060,10 +26060,10 @@ async function execute(cmd, params = []) {
 exports.execute = execute;
 const options = {};
 options.listeners = {
-    stdout: data => {
+    stdout: (data) => {
         core.info(data.toString());
     },
-    stderr: data => {
+    stderr: (data) => {
         core.setFailed(data.toString());
     }
 };
