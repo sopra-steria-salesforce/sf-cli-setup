@@ -26055,7 +26055,14 @@ exports.execute = void 0;
 const exec = __importStar(__nccwpck_require__(1514));
 const core = __importStar(__nccwpck_require__(2186));
 async function execute(cmd, params = []) {
-    await exec.exec(cmd, params, options);
+    await exec.exec(cmd, params).then(res => {
+        if (res !== 0) {
+            core.info(JSON.stringify(res));
+        }
+        else {
+            core.setFailed(JSON.stringify(res));
+        }
+    });
 }
 exports.execute = execute;
 const options = {};
