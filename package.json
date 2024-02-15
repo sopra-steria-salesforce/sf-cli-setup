@@ -21,6 +21,7 @@
     "node": ">=20"
   },
   "scripts": {
+    "preinstall": "cp scripts/pre-commit .git/hooks/ && chmod +x .git/hooks/pre-commit && echo 'hook copied'",
     "bundle": "npm run format:write && npm run package",
     "format:write": "prettier --write **/*.ts",
     "format:check": "prettier --check **/*.ts",

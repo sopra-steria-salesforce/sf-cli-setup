@@ -1,0 +1,15 @@
+#!/bin/sh
+
+echo "Running 'npm run bundle'"
+
+stash_commit="$(git stash create)"
+git reset —-hard
+
+npm run bundle
+git add ./dist
+
+if [[ -n "${stash_commit}" ]]
+then git stash apply "${stash_commit}"
+fi
+
+exit 0
