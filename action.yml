@@ -22,9 +22,6 @@ inputs:
   private-key:
     description: The private key to be used in the jwt authentication flow
     required: false
-  private-key-base64:
-    description: The base64 encoded private key to be used in the jwt authentication flow
-    required: false
   access-token:
     description: The access token to be used in the access-token flow
     required: false

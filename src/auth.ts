@@ -15,11 +15,7 @@ export async function authOrg(): Promise<void> {
 function authenticate(): void {
   if (core.getInput('auth-url')) {
     authenticateAuthUrl()
-  } else if (
-    core.getInput('username') &&
-    core.getInput('client-id') &&
-    (core.getInput('private-key') || core.getInput('private-key-base64'))
-  ) {
+  } else if (core.getInput('username') && core.getInput('client-id') && core.getInput('private-key')) {
     authenticateJwt()
   } else if (core.getInput('access-token') && core.getInput('instance-url')) {
     authenticateAccessToken()
@@ -38,8 +34,6 @@ async function authenticateJwt(): Promise<void> {
   let private_key = ''
   if (core.getInput('private-key')) {
     fs.writeFileSync('./tmp/server.key', core.getInput('private-key'))
-  } else if (core.getInput('private-key-base64')) {
-    fs.writeFileSync('./tmp/server.key', Buffer.from(core.getInput('private-key-base64'), 'base64').toString())
   }
 
   await execute(

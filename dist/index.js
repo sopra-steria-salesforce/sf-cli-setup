@@ -25987,9 +25987,7 @@ function authenticate() {
     if (core.getInput('auth-url')) {
         authenticateAuthUrl();
     }
-    else if (core.getInput('username') &&
-        core.getInput('client-id') &&
-        (core.getInput('private-key') || core.getInput('private-key-base64'))) {
+    else if (core.getInput('username') && core.getInput('client-id') && core.getInput('private-key')) {
         authenticateJwt();
     }
     else if (core.getInput('access-token') && core.getInput('instance-url')) {
@@ -26007,9 +26005,6 @@ async function authenticateJwt() {
     let private_key = '';
     if (core.getInput('private-key')) {
         fs_1.default.writeFileSync('./tmp/server.key', core.getInput('private-key'));
-    }
-    else if (core.getInput('private-key-base64')) {
-        fs_1.default.writeFileSync('./tmp/server.key', Buffer.from(core.getInput('private-key-base64'), 'base64').toString());
     }
     await (0, helper_1.execute)(`sf org login jwt --username ${user} --client-id ${client_id} --jwt-key-file ./tmp/server.key --set-default-dev-hub --set-default`);
 }

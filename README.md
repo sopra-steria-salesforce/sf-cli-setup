@@ -25,7 +25,7 @@ This action allows to use the Salesforce sf cli from GitHub Actions, and easily 
 
 - `username`
 - `client-id`
-- `private-key` (or use `private-key-base64` if preferred)
+- `private-key`
 
 ### sfdx-url flow
 
@@ -79,7 +79,7 @@ jobs:
           sf-cli-version: latest
           username: ${{ secrets.USERNAME }}
           client-id: ${{ secrets.CLIENT_ID }}
-          private-key-base64: ${{ secrets.PRIVATE_KEY }}
+          private-key: ${{ secrets.PRIVATE_KEY }}
       - run: sf apex test run -l RunLocalTests -w 30
 ```
 
