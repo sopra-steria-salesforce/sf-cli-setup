@@ -8,8 +8,8 @@ branding:
 
 inputs:
   sf-cli-version:
-    description: sf cli version number. latest or specific version number required.
-    required: true
+    description: sf cli version number. Specify a version number (x.x.x) or empty for the latest version
+    required: false
   auth-url:
     description: The auth-url to be used in the auth-url authentication flow
     required: false

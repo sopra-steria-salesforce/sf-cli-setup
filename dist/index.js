@@ -26130,11 +26130,13 @@ async function init() {
     await (0, helper_1.execute)('mkdir -p tmp/sf');
 }
 async function install() {
-    const version = core.getInput('sf-cli-version', { required: true });
-    if (!version) {
-        core.setFailed(`missing version number, provide 'sf-cli-version' with 'latest' or a specific version number`);
+    const version = core.getInput('sf-cli-version');
+    if (version) {
+        await (0, helper_1.execute)(`npm install -g @salesforce/cli@${version}`);
     }
-    await (0, helper_1.execute)(`npm install -g @salesforce/cli@${version}`);
+    else {
+        await (0, helper_1.execute)(`npm install -g @salesforce/cli@latest`);
+    }
     await (0, helper_1.execute)('sf --version && sf plugins --core');
 }
 

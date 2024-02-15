@@ -9,7 +9,7 @@ This action allows to use the Salesforce sf cli from GitHub Actions, and easily 
 
 ### Version
 
-**Required** Set a specific sf cli version (or use `latest`). You can find version numbers at
+**Optional** Set a specific sf cli version (or empty for latest version). You can find version numbers at
 [npm](https://www.npmjs.com/package/@salesforce/cli?activeTab=versions).
 
 #### Variables

@@ -18,10 +18,11 @@ async function init(): Promise<void> {
 }
 
 async function install(): Promise<void> {
-  const version = core.getInput('sf-cli-version', { required: true })
-  if (!version) {
-    core.setFailed(`missing version number, provide 'sf-cli-version' with 'latest' or a specific version number`)
+  const version = core.getInput('sf-cli-version')
+  if (version) {
+    await execute(`npm install -g @salesforce/cli@${version}`)
+  } else {
+    await execute(`npm install -g @salesforce/cli@latest`)
   }
-  await execute(`npm install -g @salesforce/cli@${version}`)
   await execute('sf --version && sf plugins --core')
 }
