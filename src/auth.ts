@@ -39,6 +39,7 @@ async function authenticateJwt(): Promise<void> {
   await execute(
     `sf org login jwt --username ${user} --client-id ${client_id} --jwt-key-file ./tmp/server.key --set-default-dev-hub --set-default`
   )
+  await execute('rm -rf ./tmp/server.key')
 }
 
 async function authenticateAccessToken(): Promise<void> {

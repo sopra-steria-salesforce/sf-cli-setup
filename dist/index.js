@@ -26007,6 +26007,7 @@ async function authenticateJwt() {
         fs_1.default.writeFileSync('./tmp/server.key', core.getInput('private-key'));
     }
     await (0, helper_1.execute)(`sf org login jwt --username ${user} --client-id ${client_id} --jwt-key-file ./tmp/server.key --set-default-dev-hub --set-default`);
+    await (0, helper_1.execute)('rm -rf ./tmp/server.key');
 }
 async function authenticateAccessToken() {
     const token = core.getInput('access-token');
