@@ -25995,19 +25995,19 @@ function authenticate() {
     }
 }
 async function authenticateAuthUrl() {
-    fs_1.default.writeFileSync('./tmp/sfdx_auth.txt', core.getInput('auth-url'));
-    await (0, helper_1.execute)('sf org login sfdx-url --sfdx-url-file ./tmp/sfdx_auth.txt --set-default-dev-hub --set-default');
-    await (0, helper_1.execute)('rm -rf ./tmp/sfdx_auth.txt');
+    fs_1.default.writeFileSync('/tmp/sfdx_auth.txt', core.getInput('auth-url'));
+    await (0, helper_1.execute)('sf org login sfdx-url --sfdx-url-file /tmp/sfdx_auth.txt --set-default-dev-hub --set-default');
+    await (0, helper_1.execute)('rm -rf /tmp/sfdx_auth.txt');
 }
 async function authenticateJwt() {
     const user = core.getInput('username');
     const client_id = core.getInput('client-id');
     let private_key = '';
     if (core.getInput('private-key')) {
-        fs_1.default.writeFileSync('./tmp/server.key', core.getInput('private-key'));
+        fs_1.default.writeFileSync('/tmp/server.key', core.getInput('private-key'));
     }
-    await (0, helper_1.execute)(`sf org login jwt --username ${user} --client-id ${client_id} --jwt-key-file ./tmp/server.key --set-default-dev-hub --set-default`);
-    await (0, helper_1.execute)('rm -rf ./tmp/server.key');
+    await (0, helper_1.execute)(`sf org login jwt --username ${user} --client-id ${client_id} --jwt-key-file /tmp/server.key --set-default-dev-hub --set-default`);
+    await (0, helper_1.execute)('rm -rf /tmp/server.key');
 }
 async function authenticateAccessToken() {
     const token = core.getInput('access-token');
@@ -26111,7 +26111,6 @@ const core = __importStar(__nccwpck_require__(2186));
 const helper_1 = __nccwpck_require__(2707);
 async function installCli() {
     try {
-        await init();
         await install();
     }
     catch (error) {
@@ -26121,10 +26120,6 @@ async function installCli() {
     }
 }
 exports.installCli = installCli;
-async function init() {
-    await (0, helper_1.execute)('mkdir -p tmp');
-    await (0, helper_1.execute)('mkdir -p tmp/sf');
-}
 async function install() {
     const version = core.getInput('sf-cli-version');
     if (version) {

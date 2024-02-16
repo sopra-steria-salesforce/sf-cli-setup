@@ -3,18 +3,12 @@ import { execute } from './helper'
 
 export async function installCli(): Promise<void> {
   try {
-    await init()
     await install()
   } catch (error) {
     if (error instanceof Error) {
       core.setFailed(error.message)
     }
   }
-}
-
-async function init(): Promise<void> {
-  await execute('mkdir -p tmp')
-  await execute('mkdir -p tmp/sf')
 }
 
 async function install(): Promise<void> {
