@@ -25995,18 +25995,23 @@ function authenticate() {
     }
 }
 async function authenticateAuthUrl() {
-    fs_1.default.writeFileSync('/tmp/sfdx_auth.txt', core.getInput('auth-url'));
-    await (0, helper_1.execute)('sf org login sfdx-url --sfdx-url-file /tmp/sfdx_auth.txt --set-default-dev-hub --set-default');
-    await (0, helper_1.execute)('rm -rf /tmp/sfdx_auth.txt');
+    let auth_url = '<(printf "%s\n" "' + core.getInput('auth-url') + '")';
+    await (0, helper_1.execute)(`sf org login sfdx-url --set-default-dev-hub --set-default --sfdx-url-file ${auth_url}`);
 }
 async function authenticateJwt() {
     const user = core.getInput('username');
     const client_id = core.getInput('client-id');
-    let private_key = '';
-    if (core.getInput('private-key')) {
-        fs_1.default.writeFileSync('/tmp/server.key', core.getInput('private-key'));
-    }
-    await (0, helper_1.execute)(`sf org login jwt --username ${user} --client-id ${client_id} --jwt-key-file /tmp/server.key --set-default-dev-hub --set-default`);
+    // need to write the key to a file, because when creating scratch orgs the private key is needed again.
+    // stored in /tmp at root, which is not tracked by git. Repo is stored at /home/runner/work/my-repo-name/my-repo-name.
+    fs_1.default.writeFileSync('/tmp/server.key', core.getInput('private-key'));
+    await (0, helper_1.execute)([
+        'sf org login jwt',
+        '--username ' + user,
+        '--client-id ' + client_id,
+        '--jwt-key-file /tmp/server.key',
+        '--set-default-dev-hub',
+        '--set-default'
+    ].join(' '));
 }
 async function authenticateAccessToken() {
     const token = core.getInput('access-token');
