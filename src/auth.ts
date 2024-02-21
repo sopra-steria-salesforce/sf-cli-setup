@@ -23,8 +23,9 @@ function authenticate(): void {
 }
 
 async function authenticateAuthUrl(): Promise<void> {
-  let auth_url = '<(printf "%s\n" "' + core.getInput('auth-url') + '")'
-  await execute(`sf org login sfdx-url --set-default-dev-hub --set-default --sfdx-url-file ${auth_url}`)
+  fs.writeFileSync('/tmp/sfdx_auth.txt', core.getInput('auth-url'))
+  await execute('sf org login sfdx-url --sfdx-url-file /tmp/sfdx_auth.txt --set-default-dev-hub --set-default')
+  await execute('rm -rf /tmp/sfdx_auth.txt')
 }
 
 async function authenticateJwt(): Promise<void> {

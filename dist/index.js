@@ -25995,8 +25995,9 @@ function authenticate() {
     }
 }
 async function authenticateAuthUrl() {
-    let auth_url = '<(printf "%s\n" "' + core.getInput('auth-url') + '")';
-    await (0, helper_1.execute)(`sf org login sfdx-url --set-default-dev-hub --set-default --sfdx-url-file ${auth_url}`);
+    fs_1.default.writeFileSync('/tmp/sfdx_auth.txt', core.getInput('auth-url'));
+    await (0, helper_1.execute)('sf org login sfdx-url --sfdx-url-file /tmp/sfdx_auth.txt --set-default-dev-hub --set-default');
+    await (0, helper_1.execute)('rm -rf /tmp/sfdx_auth.txt');
 }
 async function authenticateJwt() {
     const user = core.getInput('username');
