@@ -28,6 +28,14 @@ inputs:
   instance-url:
     description: The instance url be used in the access-token flow
     required: false
+  set-default-dev-hub:
+    description: Set the default dev hub org
+    required: false
+    default: 'false'
+  set-default-org:
+    description: Set the default org
+    required: false
+    default: 'false'
 
 runs:
   using: node20

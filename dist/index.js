@@ -25972,6 +25972,8 @@ exports.authOrg = void 0;
 const core = __importStar(__nccwpck_require__(2186));
 const helper_1 = __nccwpck_require__(2707);
 const fs_1 = __importDefault(__nccwpck_require__(7147));
+const defaultOrg = core.getInput('set-default-org') == 'true' ? '--set-default' : '';
+const defaultDevhub = core.getInput('set-default-dev-hub') == 'true' ? '--set-default-dev-hub' : '';
 async function authOrg() {
     try {
         authenticate();
@@ -25996,7 +25998,7 @@ function authenticate() {
 }
 async function authenticateAuthUrl() {
     fs_1.default.writeFileSync('/tmp/sfdx_auth.txt', core.getInput('auth-url'));
-    await (0, helper_1.execute)('sf org login sfdx-url --sfdx-url-file /tmp/sfdx_auth.txt --set-default-dev-hub --set-default');
+    await (0, helper_1.execute)(`sf org login sfdx-url --sfdx-url-file /tmp/sfdx_auth.txt ${defaultDevhub} ${defaultOrg}`);
     await (0, helper_1.execute)('rm -rf /tmp/sfdx_auth.txt');
 }
 async function authenticateJwt() {
@@ -26010,14 +26012,14 @@ async function authenticateJwt() {
         '--username ' + user,
         '--client-id ' + client_id,
         '--jwt-key-file /tmp/server.key',
-        '--set-default-dev-hub',
-        '--set-default'
+        defaultDevhub,
+        defaultOrg
     ].join(' '));
 }
 async function authenticateAccessToken() {
     const token = core.getInput('access-token');
     const url = core.getInput('instance-url');
-    await (0, helper_1.execute)(`echo ${token} | sf org login access-token --set-default-dev-hub --set-default --no-prompt --instance-url ${url}`);
+    await (0, helper_1.execute)(`echo ${token} | sf org login access-token ${defaultDevhub} ${defaultOrg} --no-prompt --instance-url ${url}`);
 }
 
 
