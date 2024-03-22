@@ -26115,9 +26115,14 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.installCli = void 0;
 const core = __importStar(__nccwpck_require__(2186));
+const exec = __importStar(__nccwpck_require__(1514));
 const helper_1 = __nccwpck_require__(2707);
 async function installCli() {
     try {
+        if (await isAlreadyInstalled()) {
+            core.info('Salesforce CLI is already installed, skipping installation.');
+            return;
+        }
         await install();
     }
     catch (error) {
@@ -26130,12 +26135,21 @@ exports.installCli = installCli;
 async function install() {
     const version = core.getInput('sf-cli-version');
     if (version) {
-        await (0, helper_1.execute)(`npm install -g @salesforce/cli@${version}`);
+        await (0, helper_1.execute)(`npm install --global @salesforce/cli@${version}`);
     }
     else {
-        await (0, helper_1.execute)(`npm install -g @salesforce/cli@latest`);
+        await (0, helper_1.execute)(`npm install --global @salesforce/cli@latest`);
     }
     await (0, helper_1.execute)('sf --version && sf plugins --core');
+}
+async function isAlreadyInstalled() {
+    try {
+        await exec.exec('npm ls --global @salesforce/cli');
+        return true;
+    }
+    catch (error) {
+        return false;
+    }
 }
 
 
