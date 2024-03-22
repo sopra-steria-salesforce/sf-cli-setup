@@ -7,24 +7,24 @@ This action allows to use the Salesforce sf cli from GitHub Actions, and easily 
 
 # Inputs
 
-| Variable              | Type              | Required | Example                       | Documentation                                                                                                                                                                                         |
-| --------------------- | ----------------- | -------- | ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `sf-cli-version`      | General           | Optional | `2.27.6` or empty for latest  | [sf cli versions](https://www.npmjs.com/package/@salesforce/cli?activeTab=versions)                                                                                                                   |
-| `set-default-dev-hub` | General           | Optional | `true` or `false` (default)   | [sf docs](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_cli_usernames_orgs.htm)                                                                                   |
-| `set-default-org`     | General           | Optional | `true` or `false` (default)   | [sf docs](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_cli_usernames_orgs.htm)                                                                                   |
-| `username`            | jwt flow          | Optional | `${{ secrets.USERNAME }}`     | [jwt docs](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_auth_jwt_flow.htm)                                                                                       |
-| `client-id`           | jwt flow          | Optional | `${{ secrets.CLIENT_ID }}`    | [jwt docs](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_auth_jwt_flow.htm)                                                                                       |
-| `private-key`         | jwt flow          | Optional | `${{ secrets.PRIVATE_KEY }}`  | [jwt docs](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_auth_jwt_flow.htm)                                                                                       |
-| `auth-url`            | sfdx-url flow     | Optional | `${{ secrets.AUTH_URL }}`     | [sfdx-url docs](https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_org_commands_unified.htm#cli_reference_org_login_sfdx-url_unified)         |
-| `access-token`        | access-token flow | Optional | `${{ env.ACCESS_TOKEN }}`     | [access-token docs](https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_org_commands_unified.htm#cli_reference_org_login_access-token_unified) |
-| `instance-url`        | access-token flow | Optional | `${{ env.ACCESS_TOKEN_URL }}` | [access-token docs](https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_org_commands_unified.htm#cli_reference_org_login_access-token_unified) |
+| Variable              | Type                    | Required | Example                             | Documentation                                                                                                                                                                                         |
+| --------------------- | ----------------------- | -------- | ----------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `sf-cli-version`      | General                 | Optional | `2.27.6` or empty for latest        | [sf cli versions](https://www.npmjs.com/package/@salesforce/cli?activeTab=versions)                                                                                                                   |
+| `set-default-dev-hub` | General                 | Optional | `true` or `false` (default)         | [sf docs](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_cli_usernames_orgs.htm)                                                                                   |
+| `set-default-org`     | General                 | Optional | `true` or `false` (default)         | [sf docs](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_cli_usernames_orgs.htm)                                                                                   |
+| `username`            | jwt flow                | Optional | `sf@example.com`                    | [jwt docs](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_auth_jwt_flow.htm)                                                                                       |
+| `client-id`           | jwt flow                | Optional | `${{ secrets.CLIENT_ID }}`          | [jwt docs](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_auth_jwt_flow.htm)                                                                                       |
+| `private-key`         | jwt flow                | Optional | `${{ secrets.PRIVATE_KEY }}`        | [jwt docs](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_auth_jwt_flow.htm)                                                                                       |
+| `instance-url`        | jwt & access-token flow | Optional | `https://example.my.salesforce.com` | [access-token docs](https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_org_commands_unified.htm#cli_reference_org_login_access-token_unified) |
+| `access-token`        | access-token flow       | Optional | `${{ env.ACCESS_TOKEN }}`           | [access-token docs](https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_org_commands_unified.htm#cli_reference_org_login_access-token_unified) |
+| `auth-url`            | sfdx-url flow           | Optional | `${{ secrets.AUTH_URL }}`           | [sfdx-url docs](https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_org_commands_unified.htm#cli_reference_org_login_sfdx-url_unified)         |
 
 ## jwt ([jwt docs](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_auth_jwt_flow.htm))
 
 Allows authenticating the DevHub org using `username` of a dedicated integration user, and `client-id` and `private-key`
 of a connected app. You'll also need the `client-secret` to create a scratch org using the jwt flow, but it's not needed
-for this plugin. The benefit of authenticating the DevHub using jwt is that you can re-authenticate any active scratch
-org without knowing any information about it (except the username). See example below.
+in the plugin. The benefit of authenticating the DevHub using jwt is that you can re-authenticate any active scratch org
+without knowing any information about it (except the username and instance url). See example below.
 
 ## sfdx-url token ([docs](https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_org_commands_unified.htm#cli_reference_org_login_sfdx-url_unified))
 
@@ -59,16 +59,18 @@ jobs:
           private-key: ${{ secrets.PRIVATE_KEY }}
           set-default-dev.hub: true
 
-      - run:
+      - run: |
           echo '${{ secrets.CLIENT_SECRET }}' | sf org:create:scratch --client-id ${{ secrets.CLIENT_ID }}
           --definition-file config/project-scratch-dev.json --wait 20 --alias scratch-org
 
-      - run:
+      - run: |
           echo "username=$(sf org:display --target-org scratch-org --json | jq -r '.result.username')" >> $GITHUB_OUTPUT
+          echo "instance-url=$(sf org:display --target-org scratch-org --json | jq -r '.result.instanceUrl')" >> $GITHUB_OUTPUT
         id: scratch-org
 
     outputs:
       username: ${{ steps.scratch-org.outputs.username }}
+      instance-url: ${{ steps.scratch-org.outputs.instance-url }}
 
   deploy:
     runs-on: ubuntu-latest
@@ -78,6 +80,7 @@ jobs:
         with:
           sf-cli-version: latest
           username: ${{ needs.create.outputs.username }}
+          instance-url: ${{ needs.create.outputs.instance-url }}
           client-id: ${{ secrets.CLIENT_ID }}
           private-key: ${{ secrets.PRIVATE_KEY }}
           set-default-org: true

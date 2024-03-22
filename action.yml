@@ -22,11 +22,11 @@ inputs:
   private-key:
     description: The private key to be used in the jwt authentication flow
     required: false
+  instance-url:
+    description: The instance url to be used in the jwt and access-token flow
+    required: false
   access-token:
     description: The access token to be used in the access-token flow
-    required: false
-  instance-url:
-    description: The instance url be used in the access-token flow
     required: false
   set-default-dev-hub:
     description: Set the default dev hub org

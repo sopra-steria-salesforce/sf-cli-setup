@@ -2,8 +2,9 @@ import * as core from '@actions/core'
 import { execute } from './helper'
 import fs from 'fs'
 
-const defaultOrg = core.getInput('set-default-org') == 'true' ? '--set-default' : ''
-const defaultDevhub = core.getInput('set-default-dev-hub') == 'true' ? '--set-default-dev-hub' : ''
+const instanceUrl = core.getInput('instance-url') ? '--instance-url ' + core.getInput('instance-url') : ''
+const defaultOrg = core.getInput('set-default-org') ? '--set-default' : ''
+const defaultDevhub = core.getInput('set-default-dev-hub') ? '--set-default-dev-hub' : ''
 
 export async function authOrg(): Promise<void> {
   try {
@@ -44,6 +45,7 @@ async function authenticateJwt(): Promise<void> {
       '--username ' + user,
       '--client-id ' + client_id,
       '--jwt-key-file /tmp/server.key',
+      instanceUrl,
       defaultDevhub,
       defaultOrg
     ].join(' ')

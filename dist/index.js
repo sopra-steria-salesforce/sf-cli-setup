@@ -25972,8 +25972,9 @@ exports.authOrg = void 0;
 const core = __importStar(__nccwpck_require__(2186));
 const helper_1 = __nccwpck_require__(2707);
 const fs_1 = __importDefault(__nccwpck_require__(7147));
-const defaultOrg = core.getInput('set-default-org') == 'true' ? '--set-default' : '';
-const defaultDevhub = core.getInput('set-default-dev-hub') == 'true' ? '--set-default-dev-hub' : '';
+const instanceUrl = core.getInput('instance-url') ? '--instance-url ' + core.getInput('instance-url') : '';
+const defaultOrg = core.getInput('set-default-org') ? '--set-default' : '';
+const defaultDevhub = core.getInput('set-default-dev-hub') ? '--set-default-dev-hub' : '';
 async function authOrg() {
     try {
         authenticate();
@@ -26012,6 +26013,7 @@ async function authenticateJwt() {
         '--username ' + user,
         '--client-id ' + client_id,
         '--jwt-key-file /tmp/server.key',
+        instanceUrl,
         defaultDevhub,
         defaultOrg
     ].join(' '));
