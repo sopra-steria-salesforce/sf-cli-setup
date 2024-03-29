@@ -51,9 +51,7 @@ export class Installer {
       await execute('ln -s ./node_modules/.bin/sf ./node_modules/.bin/sf-cli/sf')
       core.addPath('./node_modules/.bin/sf-cli')
       core.info('Added local npm installation of Salesforce CLI to path, `sf` is ready for use.')
-    } catch (error) {
-      core.setFailed('Failed to add Salesforce CLI to path.')
-    }
+    } catch (error) {}
   }
 
   /* -------------------------------------------------------------------------- */
