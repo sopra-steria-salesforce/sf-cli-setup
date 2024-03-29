@@ -28836,7 +28836,7 @@ class SalesforceCLI {
     async install() {
         try {
             await this.download();
-            await this.installCli();
+            // await this.installCli()
         }
         catch (error) {
             if (error instanceof Error) {
@@ -28879,13 +28879,16 @@ class SalesforceCLI {
         const binDir = await this.createBinDir(workDir);
         const tempDir = await this.createTempDir(workDir);
         const cliPath = await tc.downloadTool('https://registry.npmjs.org/@salesforce/cli/-/cli-2.34.7.tgz');
+        await (0, helper_1.execute)(`chmod +x ${tempDir}/sf/bin/run.js`);
         const cliExtractedFolder = await tc.extractTar(cliPath, tempDir);
         if (process.platform === 'win32') {
         }
         else {
         }
         const toolBin = `${cliExtractedFolder}/sf`;
-        await io.mv(toolBin, binDir);
+        await (0, helper_1.execute)(`ln -s ${tempDir}/sf/bin/run.js ${binDir}/sf`);
+        await (0, helper_1.execute)(`chmod +x ${binDir}/sf`);
+        // await io.mv(toolBin, binDir)
     }
     async installCli() {
         if (this.NPM_MODE) {

@@ -4,7 +4,7 @@ import fs from 'fs'
 import { getInputs } from './action-inputs'
 import { IActionInputs } from './types'
 
-export class Authenticater {
+export class SalesforceAuth {
   in: IActionInputs
 
   constructor() {

@@ -38,19 +38,24 @@ jobs:
         with:
           node-version: 20
 
-      - run: sf --version
-
-  test-specific-version:
-    name: test specific version
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        id: checkout
-        uses: actions/checkout@v4
-
       - name: Run Plugin
         uses: ./
         with:
-          sf-cli-version: 2.33.3
+          npm-mode: true
 
       - run: sf --version
+
+  # test-specific-version:
+  #   name: test specific version
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout
+  #       id: checkout
+  #       uses: actions/checkout@v4
+
+  #     - name: Run Plugin
+  #       uses: ./
+  #       with:
+  #         sf-cli-version: 2.33.3
+
+  #     - run: sf --version

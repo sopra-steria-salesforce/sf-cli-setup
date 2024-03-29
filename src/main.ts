@@ -1,10 +1,10 @@
-import { Installer } from './install'
-import { Authenticater } from './auth'
+import { SalesforceCLI } from './install'
+import { SalesforceAuth } from './auth'
 
 export async function run(): Promise<void> {
-  const installer = new Installer()
-  await installer.install()
+  const cli = new SalesforceCLI()
+  await cli.install()
 
-  const authenticater = new Authenticater()
-  await authenticater.auth()
+  const sf = new SalesforceAuth()
+  await sf.auth()
 }
