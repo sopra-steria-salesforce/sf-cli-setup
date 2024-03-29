@@ -56,7 +56,7 @@ jobs:
         run: npx sf --version
 
       - name: Use sf cli from path
-      run: sf --version
+        run: sf --version
 
   test-global:
     name: test global install
