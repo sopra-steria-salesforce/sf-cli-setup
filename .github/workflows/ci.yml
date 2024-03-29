@@ -45,18 +45,18 @@ jobs:
       #     key: node_modules
       #     restore-keys: node_modules
 
-      - run: npm install --global
+      - run: npm install --ignore-scripts
 
       - name: Run Plugin
         uses: ./
         with:
           npm-mode: true
 
-      # - name: Use sf cli from npx
-      # run: npx sf --version
+      - name: Use sf cli from npx
+        run: npx sf --version
 
-      - name: Use sf cli from path
-        run: sf --version
+      # - name: Use sf cli from path
+      # run: sf --version
 
   test-global:
     name: test global install

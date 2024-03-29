@@ -26211,7 +26211,7 @@ class Installer {
     async installCli() {
         if (this.NPM_MODE) {
             core.info('Salesforce CLI is installed locally using npm, skipping installation.');
-            // return await this.addToPath()
+            return await this.addToPath();
             return;
         }
         if (await this.isAlreadyInstalled()) {

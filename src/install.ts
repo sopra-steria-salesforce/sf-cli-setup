@@ -26,7 +26,7 @@ export class Installer {
   private async installCli(): Promise<void> {
     if (this.NPM_MODE) {
       core.info('Salesforce CLI is installed locally using npm, skipping installation.')
-      // return await this.addToPath()
+      return await this.addToPath()
       return
     }
 
