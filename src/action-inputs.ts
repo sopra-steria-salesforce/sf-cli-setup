@@ -22,8 +22,8 @@ export const getInputs = (): IActionInputs => {
     INSTANCE_URL,
     ACCESS_TOKEN,
     ALIAS,
-    SET_DEFAULT_DEV_HUB: SET_DEFAULT_DEV_HUB == 'true',
-    SET_DEFAULT_ORG: SET_DEFAULT_ORG == 'true',
-    NPM_MODE: NPM_MODE == 'true'
+    SET_DEFAULT_DEV_HUB: SET_DEFAULT_DEV_HUB === 'true',
+    SET_DEFAULT_ORG: SET_DEFAULT_ORG === 'true',
+    NPM_MODE: NPM_MODE === 'true'
   }
 }

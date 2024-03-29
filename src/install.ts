@@ -13,7 +13,7 @@ export class Installer {
     this.NPM_MODE = NPM_MODE
   }
 
-  public async install(): Promise<void> {
+  async install(): Promise<void> {
     try {
       await this.installCli()
     } catch (error) {

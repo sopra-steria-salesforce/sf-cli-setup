@@ -25988,9 +25988,9 @@ const getInputs = () => {
         INSTANCE_URL,
         ACCESS_TOKEN,
         ALIAS,
-        SET_DEFAULT_DEV_HUB: SET_DEFAULT_DEV_HUB == 'true',
-        SET_DEFAULT_ORG: SET_DEFAULT_ORG == 'true',
-        NPM_MODE: NPM_MODE == 'true'
+        SET_DEFAULT_DEV_HUB: SET_DEFAULT_DEV_HUB === 'true',
+        SET_DEFAULT_ORG: SET_DEFAULT_ORG === 'true',
+        NPM_MODE: NPM_MODE === 'true'
     };
 };
 exports.getInputs = getInputs;
@@ -26030,63 +26030,72 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.authOrg = void 0;
+exports.Authenticater = void 0;
 const core = __importStar(__nccwpck_require__(2186));
 const helper_1 = __nccwpck_require__(2707);
 const fs_1 = __importDefault(__nccwpck_require__(7147));
-const instanceUrl = core.getInput('instance-url') ? '--instance-url ' + core.getInput('instance-url') : '';
-const defaultOrg = core.getInput('set-default-org') ? '--set-default' : '';
-const defaultDevhub = core.getInput('set-default-dev-hub') ? '--set-default-dev-hub' : '';
-const alias = core.getInput('alias') ? '--salias ' + core.getInput('alias') : '';
-async function authOrg() {
-    try {
-        authenticate();
+const action_inputs_1 = __nccwpck_require__(9437);
+class Authenticater {
+    in;
+    constructor() {
+        this.in = (0, action_inputs_1.getInputs)();
     }
-    catch (error) {
-        if (error instanceof Error) {
-            core.setFailed(error.message);
+    async auth() {
+        try {
+            this.authenticate();
+        }
+        catch (error) {
+            if (error instanceof Error) {
+                core.setFailed(error.message);
+            }
         }
     }
-}
-exports.authOrg = authOrg;
-function authenticate() {
-    if (core.getInput('auth-url')) {
-        authenticateAuthUrl();
+    authenticate() {
+        if (this.in.AUTH_URL) {
+            this.authenticateAuthUrl();
+        }
+        else if (this.in.USERNAME && this.in.CLIENT_ID && this.in.PRIVATE_KEY) {
+            this.authenticateJwt();
+        }
+        else if (this.in.ACCESS_TOKEN && this.in.INSTANCE_URL) {
+            this.authenticateAccessToken();
+        }
     }
-    else if (core.getInput('username') && core.getInput('client-id') && core.getInput('private-key')) {
-        authenticateJwt();
+    async authenticateAuthUrl() {
+        fs_1.default.writeFileSync('/tmp/sfdx_auth.txt', this.in.AUTH_URL);
+        await this.auth2('sf org login sfdx-url', ['--sfdx-url-file /tmp/sfdx_auth.txt']);
+        await (0, helper_1.execute)('rm -rf /tmp/sfdx_auth.txt');
     }
-    else if (core.getInput('access-token') && core.getInput('instance-url')) {
-        authenticateAccessToken();
+    async authenticateJwt() {
+        // need to write the key to a file, because when creating scratch orgs the private key is needed again.
+        // stored in /tmp at root, which is not tracked by git. Repo is stored at /home/runner/work/my-repo-name/my-repo-name.
+        fs_1.default.writeFileSync('/tmp/server.key', this.in.PRIVATE_KEY);
+        await this.auth2('sf org login jwt', [
+            `--username ${this.in.USERNAME}`,
+            `--client-id ${this.in.CLIENT_ID}`,
+            '--jwt-key-file /tmp/server.key'
+        ]);
+    }
+    async authenticateAccessToken() {
+        await this.auth2(`echo ${this.in.ACCESS_TOKEN} | sf org login access-token`, ['--no-prompt']);
+    }
+    async auth2(type, parameters) {
+        await (0, helper_1.execute)(`${type} ${parameters.join(' ')} ${this.alias} ${this.defaultDevhub} ${this.defaultOrg} ${this.instanceUrl}`);
+    }
+    get alias() {
+        return this.in.ALIAS ? `--alias ${this.in.ALIAS}` : '';
+    }
+    get defaultDevhub() {
+        return this.in.SET_DEFAULT_DEV_HUB ? '--set-default-dev-hub' : '';
+    }
+    get defaultOrg() {
+        return this.in.SET_DEFAULT_ORG ? '--set-default' : '';
+    }
+    get instanceUrl() {
+        return this.in.INSTANCE_URL ? `--instance-url ${this.in.INSTANCE_URL}` : '';
     }
 }
-async function authenticateAuthUrl() {
-    fs_1.default.writeFileSync('/tmp/sfdx_auth.txt', core.getInput('auth-url'));
-    await (0, helper_1.execute)(`sf org login sfdx-url --sfdx-url-file /tmp/sfdx_auth.txt ${defaultDevhub} ${defaultOrg} ${alias}`);
-    await (0, helper_1.execute)('rm -rf /tmp/sfdx_auth.txt');
-}
-async function authenticateJwt() {
-    const user = core.getInput('username');
-    const client_id = core.getInput('client-id');
-    // need to write the key to a file, because when creating scratch orgs the private key is needed again.
-    // stored in /tmp at root, which is not tracked by git. Repo is stored at /home/runner/work/my-repo-name/my-repo-name.
-    fs_1.default.writeFileSync('/tmp/server.key', core.getInput('private-key'));
-    await (0, helper_1.execute)([
-        'sf org login jwt',
-        '--username ' + user,
-        '--client-id ' + client_id,
-        '--jwt-key-file /tmp/server.key',
-        instanceUrl,
-        defaultDevhub,
-        defaultOrg,
-        alias
-    ].join(' '));
-}
-async function authenticateAccessToken() {
-    const token = core.getInput('access-token');
-    const url = core.getInput('instance-url');
-    await (0, helper_1.execute)(`echo ${token} | sf org login access-token ${defaultDevhub} ${defaultOrg} ${alias} --no-prompt --instance-url ${url}`);
-}
+exports.Authenticater = Authenticater;
 
 
 /***/ }),
@@ -26124,11 +26133,8 @@ exports.execute = void 0;
 const exec = __importStar(__nccwpck_require__(1514));
 const core = __importStar(__nccwpck_require__(2186));
 async function execute(cmd, params = []) {
-    let exitCode = 0;
     let message = '';
-    await exec.exec(cmd, params).then(res => {
-        exitCode = res;
-    });
+    const exitCode = await exec.exec(cmd, params);
     const options = {};
     options.listeners = {
         stdout: (data) => {
@@ -26264,7 +26270,8 @@ const auth_1 = __nccwpck_require__(3497);
 async function run() {
     const installer = new install_1.Installer();
     await installer.install();
-    await (0, auth_1.authOrg)();
+    const authenticater = new auth_1.Authenticater();
+    await authenticater.auth();
 }
 exports.run = run;
 
