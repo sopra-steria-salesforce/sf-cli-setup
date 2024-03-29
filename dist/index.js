@@ -28885,8 +28885,8 @@ class SalesforceCLI {
         }
         else {
         }
-        const toolBin = `${cliExtractedFolder}/sf`;
-        await (0, helper_1.execute)(`ln -s ${tempDir}/bin/run.js ${binDir}/sf`);
+        await (0, helper_1.execute)(`ls -a ${cliExtractedFolder}`);
+        await (0, helper_1.execute)(`ln -s ${cliExtractedFolder}/bin/run.js ${binDir}/sf`);
         await (0, helper_1.execute)(`chmod +x ${binDir}/sf`);
         // await io.mv(toolBin, binDir)
     }

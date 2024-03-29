@@ -77,9 +77,10 @@ export class SalesforceCLI {
     if (process.platform === 'win32') {
     } else {
     }
-    const toolBin = `${cliExtractedFolder}/sf`
 
-    await execute(`ln -s ${tempDir}/bin/run.js ${binDir}/sf`)
+    await execute(`ls -a ${cliExtractedFolder}`)
+
+    await execute(`ln -s ${cliExtractedFolder}/bin/run.js ${binDir}/sf`)
     await execute(`chmod +x ${binDir}/sf`)
 
     // await io.mv(toolBin, binDir)
