@@ -28,12 +28,19 @@ inputs:
   access-token:
     description: The access token to be used in the access-token flow
     required: false
+  alias:
+    description: The alias to be used for the org
+    required: false
   set-default-dev-hub:
     description: Set the default dev hub org
     required: false
     default: 'false'
   set-default-org:
     description: Set the default org
+    required: false
+    default: 'false'
+  npm-mode:
+    description: Install Salesforce CLI using package.json and npm (allows caching of node_modules)
     required: false
     default: 'false'
 

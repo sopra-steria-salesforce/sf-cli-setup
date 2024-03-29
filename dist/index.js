@@ -25975,6 +25975,7 @@ const fs_1 = __importDefault(__nccwpck_require__(7147));
 const instanceUrl = core.getInput('instance-url') ? '--instance-url ' + core.getInput('instance-url') : '';
 const defaultOrg = core.getInput('set-default-org') ? '--set-default' : '';
 const defaultDevhub = core.getInput('set-default-dev-hub') ? '--set-default-dev-hub' : '';
+const alias = core.getInput('alias') ? '--salias ' + core.getInput('alias') : '';
 async function authOrg() {
     try {
         authenticate();
@@ -25999,7 +26000,7 @@ function authenticate() {
 }
 async function authenticateAuthUrl() {
     fs_1.default.writeFileSync('/tmp/sfdx_auth.txt', core.getInput('auth-url'));
-    await (0, helper_1.execute)(`sf org login sfdx-url --sfdx-url-file /tmp/sfdx_auth.txt ${defaultDevhub} ${defaultOrg}`);
+    await (0, helper_1.execute)(`sf org login sfdx-url --sfdx-url-file /tmp/sfdx_auth.txt ${defaultDevhub} ${defaultOrg} ${alias}`);
     await (0, helper_1.execute)('rm -rf /tmp/sfdx_auth.txt');
 }
 async function authenticateJwt() {
@@ -26015,13 +26016,14 @@ async function authenticateJwt() {
         '--jwt-key-file /tmp/server.key',
         instanceUrl,
         defaultDevhub,
-        defaultOrg
+        defaultOrg,
+        alias
     ].join(' '));
 }
 async function authenticateAccessToken() {
     const token = core.getInput('access-token');
     const url = core.getInput('instance-url');
-    await (0, helper_1.execute)(`echo ${token} | sf org login access-token ${defaultDevhub} ${defaultOrg} --no-prompt --instance-url ${url}`);
+    await (0, helper_1.execute)(`echo ${token} | sf org login access-token ${defaultDevhub} ${defaultOrg} ${alias} --no-prompt --instance-url ${url}`);
 }
 
 
@@ -26121,10 +26123,6 @@ const exec = __importStar(__nccwpck_require__(1514));
 const helper_1 = __nccwpck_require__(2707);
 async function installCli() {
     try {
-        if (await isAlreadyInstalled()) {
-            core.info('Salesforce CLI is already installed, skipping installation.');
-            return;
-        }
         await install();
     }
     catch (error) {
@@ -26135,18 +26133,51 @@ async function installCli() {
 }
 exports.installCli = installCli;
 async function install() {
+    if (isNpmMode()) {
+        core.info('Salesforce CLI is installed locally using npm, skipping installation.');
+        return await addToPath();
+    }
+    if (await isAlreadyInstalled()) {
+        return core.info('Salesforce CLI is already installed globally, skipping installation.');
+    }
     const version = core.getInput('sf-cli-version');
-    if (version) {
-        await (0, helper_1.execute)(`npm install --global @salesforce/cli@${version}`);
+    await installGlobally(version || 'latest');
+}
+async function installGlobally(version) {
+    await (0, helper_1.execute)(`npm install --global @salesforce/cli@${version}`);
+    core.info(`Installed Salesforce CLI globally with version '${version}'`);
+}
+async function addToPath() {
+    if (await isAlreadyAddedToPath()) {
+        return core.info('Salesforce CLI is already added to path, skipping.');
     }
-    else {
-        await (0, helper_1.execute)(`npm install --global @salesforce/cli@latest`);
+    var fs = __nccwpck_require__(7147);
+    var dir = './node_modules/.bin/sf-cli';
+    if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir);
     }
-    await (0, helper_1.execute)('sf --version && sf plugins --core');
+    await (0, helper_1.execute)('ln -s ./node_modules/.bin/sf ./node_modules/.bin/sf-cli/sf');
+    core.addPath('./node_modules/.bin/sf-cli');
+    core.info('Added local npm installation of Salesforce CLI to path, `sf` is ready for use.');
+}
+/* -------------------------------------------------------------------------- */
+/*                                   helpers                                  */
+/* -------------------------------------------------------------------------- */
+function isNpmMode() {
+    return core.getInput('npm-mode') == 'true';
 }
 async function isAlreadyInstalled() {
     try {
         await exec.exec('npm ls --global @salesforce/cli');
+        return true;
+    }
+    catch (error) {
+        return false;
+    }
+}
+async function isAlreadyAddedToPath() {
+    try {
+        await exec.exec('sf');
         return true;
     }
     catch (error) {

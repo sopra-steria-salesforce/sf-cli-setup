@@ -5,6 +5,7 @@ import fs from 'fs'
 const instanceUrl = core.getInput('instance-url') ? '--instance-url ' + core.getInput('instance-url') : ''
 const defaultOrg = core.getInput('set-default-org') ? '--set-default' : ''
 const defaultDevhub = core.getInput('set-default-dev-hub') ? '--set-default-dev-hub' : ''
+const alias = core.getInput('alias') ? '--salias ' + core.getInput('alias') : ''
 
 export async function authOrg(): Promise<void> {
   try {
@@ -28,7 +29,7 @@ function authenticate(): void {
 
 async function authenticateAuthUrl(): Promise<void> {
   fs.writeFileSync('/tmp/sfdx_auth.txt', core.getInput('auth-url'))
-  await execute(`sf org login sfdx-url --sfdx-url-file /tmp/sfdx_auth.txt ${defaultDevhub} ${defaultOrg}`)
+  await execute(`sf org login sfdx-url --sfdx-url-file /tmp/sfdx_auth.txt ${defaultDevhub} ${defaultOrg} ${alias}`)
   await execute('rm -rf /tmp/sfdx_auth.txt')
 }
 
@@ -47,7 +48,8 @@ async function authenticateJwt(): Promise<void> {
       '--jwt-key-file /tmp/server.key',
       instanceUrl,
       defaultDevhub,
-      defaultOrg
+      defaultOrg,
+      alias
     ].join(' ')
   )
 }
@@ -57,6 +59,6 @@ async function authenticateAccessToken(): Promise<void> {
   const url = core.getInput('instance-url')
 
   await execute(
-    `echo ${token} | sf org login access-token ${defaultDevhub} ${defaultOrg} --no-prompt --instance-url ${url}`
+    `echo ${token} | sf org login access-token ${defaultDevhub} ${defaultOrg} ${alias} --no-prompt --instance-url ${url}`
   )
 }
