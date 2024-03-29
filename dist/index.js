@@ -26227,9 +26227,14 @@ class Installer {
             return core.info('Salesforce CLI is already added to path, skipping.');
         }
         await (0, helper_1.execute)('mkdir -p ./node_modules/.bin/sf-cli');
-        await (0, helper_1.execute)('ln -s ./node_modules/.bin/sf ./node_modules/.bin/sf-cli/sf');
-        core.addPath('./node_modules/.bin/sf-cli');
-        core.info('Added local npm installation of Salesforce CLI to path, `sf` is ready for use.');
+        try {
+            await (0, helper_1.execute)('ln -s ./node_modules/.bin/sf ./node_modules/.bin/sf-cli/sf');
+            core.addPath('./node_modules/.bin/sf-cli');
+            core.info('Added local npm installation of Salesforce CLI to path, `sf` is ready for use.');
+        }
+        catch (error) {
+            core.setFailed('Failed to add Salesforce CLI to path.');
+        }
     }
     /* -------------------------------------------------------------------------- */
     /*                                   helpers                                  */
