@@ -28880,12 +28880,12 @@ class SalesforceCLI {
         const tempDir = await this.createTempDir(workDir);
         const cliPath = await tc.downloadTool('https://registry.npmjs.org/@salesforce/cli/-/cli-2.34.7.tgz');
         const cliExtractedFolder = await tc.extractTar(cliPath, tempDir);
-        await (0, helper_1.execute)(`chmod +x ${tempDir}/bin/run.js`);
+        await (0, helper_1.execute)(`ls -a ${cliExtractedFolder}`);
+        await (0, helper_1.execute)(`chmod +x ${cliExtractedFolder}/bin/run.js`);
         if (process.platform === 'win32') {
         }
         else {
         }
-        await (0, helper_1.execute)(`ls -a ${cliExtractedFolder}`);
         await (0, helper_1.execute)(`ln -s ${cliExtractedFolder}/bin/run.js ${binDir}/sf`);
         await (0, helper_1.execute)(`chmod +x ${binDir}/sf`);
         // await io.mv(toolBin, binDir)
