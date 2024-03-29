@@ -52,8 +52,8 @@ jobs:
         with:
           npm-mode: true
 
-      - name: Use sf cli from npx
-        run: npx sf --version
+      # - name: Use sf cli from npx
+      # run: npx sf --version
 
       - name: Use sf cli from path
         run: sf --version
