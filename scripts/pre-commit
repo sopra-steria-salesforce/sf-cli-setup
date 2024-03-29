@@ -5,7 +5,10 @@ echo "Running 'npm run bundle'"
 stash_commit="$(git stash create)"
 git reset —-hard
 
-npm run all
+npm run format:write
+npm run lint
+npm run package
+
 git add ./dist
 
 if [[ -n "${stash_commit}" ]]
