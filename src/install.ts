@@ -26,7 +26,8 @@ export class Installer {
   private async installCli(): Promise<void> {
     if (this.NPM_MODE) {
       core.info('Salesforce CLI is installed locally using npm, skipping installation.')
-      return await this.addToPath()
+      // return await this.addToPath()
+      return
     }
 
     if (await this.isAlreadyInstalled()) {
@@ -47,11 +48,9 @@ export class Installer {
     }
 
     await execute('mkdir -p ./node_modules/.bin/sf-cli')
-    try {
-      await execute('ln -s ./node_modules/.bin/sf ./node_modules/.bin/sf-cli/sf')
-      core.addPath('./node_modules/.bin/sf-cli')
-      core.info('Added local npm installation of Salesforce CLI to path, `sf` is ready for use.')
-    } catch (error) {}
+    await execute('ln -s ./node_modules/.bin/sf ./node_modules/.bin/sf-cli/sf')
+    core.addPath('./node_modules/.bin/sf-cli')
+    core.info('Added local npm installation of Salesforce CLI to path, `sf` is ready for use.')
   }
 
   /* -------------------------------------------------------------------------- */
