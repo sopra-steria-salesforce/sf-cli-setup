@@ -26227,6 +26227,10 @@ class Installer {
         if (await this.isAlreadyAddedToPath()) {
             return core.info('Salesforce CLI is already added to path, skipping.');
         }
+        await (0, helper_1.execute)('ls');
+        await (0, helper_1.execute)('ls ./node_modules/');
+        await (0, helper_1.execute)('ls ./node_modules/.bin');
+        await (0, helper_1.execute)('ls ./node_modules/.bin/sf-cli');
         await (0, helper_1.execute)('mkdir -p ./node_modules/.bin/sf-cli');
         await (0, helper_1.execute)('ln -s ./node_modules/.bin/sf ./node_modules/.bin/sf-cli/sf');
         core.addPath('./node_modules/.bin/sf-cli');

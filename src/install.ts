@@ -47,6 +47,11 @@ export class Installer {
       return core.info('Salesforce CLI is already added to path, skipping.')
     }
 
+    await execute('ls')
+    await execute('ls ./node_modules/')
+    await execute('ls ./node_modules/.bin')
+    await execute('ls ./node_modules/.bin/sf-cli')
+
     await execute('mkdir -p ./node_modules/.bin/sf-cli')
     await execute('ln -s ./node_modules/.bin/sf ./node_modules/.bin/sf-cli/sf')
     core.addPath('./node_modules/.bin/sf-cli')
