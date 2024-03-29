@@ -37,14 +37,15 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: npm
 
-      - uses: actions/cache@v4
-        with:
-          path: '**/node_modules'
-          key: node_modules
-          restore-keys: node_modules
+      # - uses: actions/cache@v4
+      #   with:
+      #     path: '**/node_modules'
+      #     key: node_modules
+      #     restore-keys: node_modules
 
-      - run: npm install --ignore-scripts
+      - run: npm install --global
 
       - name: Run Plugin
         uses: ./
@@ -54,8 +55,8 @@ jobs:
       - name: Use sf cli from npx
         run: npx sf --version
 
-      # - name: Use sf cli from path
-      # run: sf --version
+      - name: Use sf cli from path
+      run: sf --version
 
   test-global:
     name: test global install
