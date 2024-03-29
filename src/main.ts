@@ -1,7 +1,9 @@
-import { installCli } from './install'
+import { Installer } from './install'
 import { authOrg } from './auth'
 
 export async function run(): Promise<void> {
-  await installCli()
+  const installer = new Installer()
+  await installer.install()
+
   await authOrg()
 }

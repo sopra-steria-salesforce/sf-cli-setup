@@ -25936,6 +25936,68 @@ exports["default"] = _default;
 
 /***/ }),
 
+/***/ 9437:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.getInputs = void 0;
+const core = __importStar(__nccwpck_require__(2186));
+const getInputs = () => {
+    const SF_CLI_VERSION = core.getInput('sf-cli-version', { required: true });
+    const AUTH_URL = core.getInput('auth-url', { required: true });
+    const USERNAME = core.getInput('username', { required: true });
+    const CLIENT_ID = core.getInput('client-id', { required: true });
+    const PRIVATE_KEY = core.getInput('private-key', { required: true });
+    const INSTANCE_URL = core.getInput('instance-url', { required: true });
+    const ACCESS_TOKEN = core.getInput('access-token', { required: true });
+    const ALIAS = core.getInput('alias:', { required: true });
+    const SET_DEFAULT_DEV_HUB = core.getInput('set-default-dev-hub', { required: true });
+    const SET_DEFAULT_ORG = core.getInput('set-default-org', { required: true });
+    const NPM_MODE = core.getInput('npm-mode', { required: true });
+    return {
+        SF_CLI_VERSION,
+        AUTH_URL,
+        USERNAME,
+        CLIENT_ID,
+        PRIVATE_KEY,
+        INSTANCE_URL,
+        ACCESS_TOKEN,
+        ALIAS,
+        SET_DEFAULT_DEV_HUB: SET_DEFAULT_DEV_HUB == 'true',
+        SET_DEFAULT_ORG: SET_DEFAULT_ORG == 'true',
+        NPM_MODE: NPM_MODE == 'true'
+    };
+};
+exports.getInputs = getInputs;
+
+
+/***/ }),
+
 /***/ 3497:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -26117,69 +26179,75 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.installCli = void 0;
+exports.Installer = void 0;
 const core = __importStar(__nccwpck_require__(2186));
 const exec = __importStar(__nccwpck_require__(1514));
 const helper_1 = __nccwpck_require__(2707);
-async function installCli() {
-    try {
-        await install();
+const action_inputs_1 = __nccwpck_require__(9437);
+class Installer {
+    SF_CLI_VERSION;
+    NPM_MODE;
+    constructor() {
+        const { SF_CLI_VERSION, NPM_MODE } = (0, action_inputs_1.getInputs)();
+        this.SF_CLI_VERSION = SF_CLI_VERSION;
+        this.NPM_MODE = NPM_MODE;
     }
-    catch (error) {
-        if (error instanceof Error) {
-            core.setFailed(error.message);
+    async install() {
+        try {
+            await this.installCli();
+        }
+        catch (error) {
+            if (error instanceof Error) {
+                core.setFailed(error.message);
+            }
+        }
+    }
+    async installCli() {
+        if (this.NPM_MODE) {
+            core.info('Salesforce CLI is installed locally using npm, skipping installation.');
+            return await this.addToPath();
+        }
+        if (await this.isAlreadyInstalled()) {
+            return core.info('Salesforce CLI is already installed globally, skipping installation.');
+        }
+        await this.installGlobally(this.SF_CLI_VERSION || 'latest');
+    }
+    async installGlobally(version) {
+        await (0, helper_1.execute)(`npm install --global @salesforce/cli@${version}`);
+        core.info(`Installed Salesforce CLI globally with version '${version}'`);
+    }
+    async addToPath() {
+        if (await this.isAlreadyAddedToPath()) {
+            return core.info('Salesforce CLI is already added to path, skipping.');
+        }
+        await (0, helper_1.execute)('mkdir -p ./node_modules/.bin/sf-cli');
+        await (0, helper_1.execute)('ln -s ./node_modules/.bin/sf ./node_modules/.bin/sf-cli/sf');
+        core.addPath('./node_modules/.bin/sf-cli');
+        core.info('Added local npm installation of Salesforce CLI to path, `sf` is ready for use.');
+    }
+    /* -------------------------------------------------------------------------- */
+    /*                                   helpers                                  */
+    /* -------------------------------------------------------------------------- */
+    async isAlreadyInstalled() {
+        try {
+            await exec.exec('npm ls --global @salesforce/cli');
+            return true;
+        }
+        catch (error) {
+            return false;
+        }
+    }
+    async isAlreadyAddedToPath() {
+        try {
+            await exec.exec('sf');
+            return true;
+        }
+        catch (error) {
+            return false;
         }
     }
 }
-exports.installCli = installCli;
-async function install() {
-    if (isNpmMode()) {
-        core.info('Salesforce CLI is installed locally using npm, skipping installation.');
-        return await addToPath();
-    }
-    if (await isAlreadyInstalled()) {
-        return core.info('Salesforce CLI is already installed globally, skipping installation.');
-    }
-    const version = core.getInput('sf-cli-version');
-    await installGlobally(version || 'latest');
-}
-async function installGlobally(version) {
-    await (0, helper_1.execute)(`npm install --global @salesforce/cli@${version}`);
-    core.info(`Installed Salesforce CLI globally with version '${version}'`);
-}
-async function addToPath() {
-    if (await isAlreadyAddedToPath()) {
-        return core.info('Salesforce CLI is already added to path, skipping.');
-    }
-    await (0, helper_1.execute)('mkdir -p ./node_modules/.bin/sf-cli');
-    await (0, helper_1.execute)('ln -s ./node_modules/.bin/sf ./node_modules/.bin/sf-cli/sf');
-    core.addPath('./node_modules/.bin/sf-cli');
-    core.info('Added local npm installation of Salesforce CLI to path, `sf` is ready for use.');
-}
-/* -------------------------------------------------------------------------- */
-/*                                   helpers                                  */
-/* -------------------------------------------------------------------------- */
-function isNpmMode() {
-    return core.getInput('npm-mode') == 'true';
-}
-async function isAlreadyInstalled() {
-    try {
-        await exec.exec('npm ls --global @salesforce/cli');
-        return true;
-    }
-    catch (error) {
-        return false;
-    }
-}
-async function isAlreadyAddedToPath() {
-    try {
-        await exec.exec('sf');
-        return true;
-    }
-    catch (error) {
-        return false;
-    }
-}
+exports.Installer = Installer;
 
 
 /***/ }),
@@ -26194,7 +26262,8 @@ exports.run = void 0;
 const install_1 = __nccwpck_require__(1649);
 const auth_1 = __nccwpck_require__(3497);
 async function run() {
-    await (0, install_1.installCli)();
+    const installer = new install_1.Installer();
+    await installer.install();
     await (0, auth_1.authOrg)();
 }
 exports.run = run;
