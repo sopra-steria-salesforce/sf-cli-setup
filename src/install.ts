@@ -72,14 +72,14 @@ export class SalesforceCLI {
 
     const cliPath = await tc.downloadTool('https://registry.npmjs.org/@salesforce/cli/-/cli-2.34.7.tgz')
     const cliExtractedFolder = await tc.extractTar(cliPath, tempDir)
-    await execute(`ls -a ${cliExtractedFolder}`)
-    await execute(`chmod +x ${cliExtractedFolder}/bin/run.js`)
+    await execute(`ls -a ${cliExtractedFolder}/package`)
+    await execute(`chmod +x ${cliExtractedFolder}/package/bin/run.js`)
 
     if (process.platform === 'win32') {
     } else {
     }
 
-    await execute(`ln -s ${cliExtractedFolder}/bin/run.js ${binDir}/sf`)
+    await execute(`ln -s ${cliExtractedFolder}/package/bin/run.js ${binDir}/sf`)
     await execute(`chmod +x ${binDir}/sf`)
 
     // await io.mv(toolBin, binDir)
