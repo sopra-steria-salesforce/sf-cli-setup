@@ -26151,11 +26151,7 @@ async function addToPath() {
     if (await isAlreadyAddedToPath()) {
         return core.info('Salesforce CLI is already added to path, skipping.');
     }
-    var fs = __nccwpck_require__(7147);
-    var dir = './node_modules/.bin/sf-cli';
-    if (!fs.existsSync(dir)) {
-        fs.mkdirSync(dir);
-    }
+    await (0, helper_1.execute)('mkdir -p ./node_modules/.bin/sf-cli');
     await (0, helper_1.execute)('ln -s ./node_modules/.bin/sf ./node_modules/.bin/sf-cli/sf');
     core.addPath('./node_modules/.bin/sf-cli');
     core.info('Added local npm installation of Salesforce CLI to path, `sf` is ready for use.');

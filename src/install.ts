@@ -36,13 +36,7 @@ async function addToPath(): Promise<void> {
     return core.info('Salesforce CLI is already added to path, skipping.')
   }
 
-  var fs = require('fs')
-  var dir = './node_modules/.bin/sf-cli'
-
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir)
-  }
-
+  await execute('mkdir -p ./node_modules/.bin/sf-cli')
   await execute('ln -s ./node_modules/.bin/sf ./node_modules/.bin/sf-cli/sf')
   core.addPath('./node_modules/.bin/sf-cli')
 
