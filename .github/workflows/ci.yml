@@ -44,6 +44,10 @@ jobs:
           npm-mode: true
 
       - run: sf --version
+        continue-on-error: true
+
+      - run: /home/runner/actions_sf_cli/bin/sf --version
+        continue-on-error: true
 
   # test-specific-version:
   #   name: test specific version

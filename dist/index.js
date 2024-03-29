@@ -28870,7 +28870,6 @@ class SalesforceCLI {
     async createBinDir(workDir) {
         const binDir = path.join(workDir, 'bin');
         await io.mkdirP(binDir);
-        core.addPath(binDir);
         core.debug(`binDir: ${binDir}`);
         return binDir;
     }
@@ -28887,6 +28886,7 @@ class SalesforceCLI {
         else {
         }
         await (0, helper_1.execute)(`ln -s ${cliExtractedFolder}/package/bin/run.js ${binDir}/sf`);
+        core.addPath(`${cliExtractedFolder}/package/bin`);
         await (0, helper_1.execute)(`chmod +x ${binDir}/sf`);
         // await io.mv(toolBin, binDir)
     }
