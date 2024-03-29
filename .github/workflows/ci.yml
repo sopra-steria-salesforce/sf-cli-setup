@@ -19,28 +19,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        id: checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        id: setup-node
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
 
-      - name: Install Dependencies
-        id: npm-ci
-        run: npm ci
-
-      - name: Check Format
-        id: npm-format-check
-        run: npm run format:check
-
-      - name: Lint
-        id: npm-lint
-        run: npm run lint
+      - run: npm ci
+      - run: npm run format:check
+      - run: npm run lint
 
   test-npm:
     name: test npm install
@@ -55,11 +42,11 @@ jobs:
         with:
           npm-mode: true
 
-      - name: Use sf cli from path
-        run: sf --version
-
       - name: Use sf cli from npx
         run: npx sf --version
+
+      - name: Use sf cli from path
+        run: sf --version
 
   test-global:
     name: test global install
