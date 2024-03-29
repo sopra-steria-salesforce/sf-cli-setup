@@ -44,7 +44,7 @@ jobs:
           key: node_modules
           restore-keys: node_modules
 
-      - run: npm install
+      - run: npm install --ignore-scripts
 
       - name: Run Plugin
         uses: ./
