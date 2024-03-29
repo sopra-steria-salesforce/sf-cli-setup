@@ -25968,17 +25968,17 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getInputs = void 0;
 const core = __importStar(__nccwpck_require__(2186));
 const getInputs = () => {
-    const SF_CLI_VERSION = core.getInput('sf-cli-version', { required: true });
-    const AUTH_URL = core.getInput('auth-url', { required: true });
-    const USERNAME = core.getInput('username', { required: true });
-    const CLIENT_ID = core.getInput('client-id', { required: true });
-    const PRIVATE_KEY = core.getInput('private-key', { required: true });
-    const INSTANCE_URL = core.getInput('instance-url', { required: true });
-    const ACCESS_TOKEN = core.getInput('access-token', { required: true });
-    const ALIAS = core.getInput('alias:', { required: true });
-    const SET_DEFAULT_DEV_HUB = core.getInput('set-default-dev-hub', { required: true });
-    const SET_DEFAULT_ORG = core.getInput('set-default-org', { required: true });
-    const NPM_MODE = core.getInput('npm-mode', { required: true });
+    const SF_CLI_VERSION = core.getInput('sf-cli-version', { required: false });
+    const AUTH_URL = core.getInput('auth-url', { required: false });
+    const USERNAME = core.getInput('username', { required: false });
+    const CLIENT_ID = core.getInput('client-id', { required: false });
+    const PRIVATE_KEY = core.getInput('private-key', { required: false });
+    const INSTANCE_URL = core.getInput('instance-url', { required: false });
+    const ACCESS_TOKEN = core.getInput('access-token', { required: false });
+    const ALIAS = core.getInput('alias:', { required: false });
+    const SET_DEFAULT_DEV_HUB = core.getInput('set-default-dev-hub', { required: false });
+    const SET_DEFAULT_ORG = core.getInput('set-default-org', { required: false });
+    const NPM_MODE = core.getInput('npm-mode', { required: false });
     return {
         SF_CLI_VERSION,
         AUTH_URL,
