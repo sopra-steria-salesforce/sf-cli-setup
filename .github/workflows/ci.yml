@@ -29,37 +29,19 @@ jobs:
       - run: npm run format:check
       - run: npm run lint
 
-  test-npm:
-    name: test npm install
-    runs-on: ubuntu-latest
+  test-latest:
+    name: test latest
+    runs-on: salesforce/cli:2.33.3-slim
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          # cache: npm
 
-      # - uses: actions/cache@v4
-      #   with:
-      #     path: '**/node_modules'
-      #     key: node_modules
-      #     restore-keys: node_modules
+      - run: sf --version
 
-      - run: npm install --ignore-scripts
-
-      - name: Run Plugin
-        uses: ./
-        with:
-          npm-mode: true
-
-      - name: Use sf cli from npx
-        run: npx sf --version
-
-      - name: Use sf cli from path
-        run: sf --version
-
-  test-global:
-    name: test global install
+  test-specific-version:
+    name: test specific version
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -71,5 +53,4 @@ jobs:
         with:
           sf-cli-version: 2.33.3
 
-      - name: Use sf cli from path
-        run: sf --version
+      - run: sf --version
