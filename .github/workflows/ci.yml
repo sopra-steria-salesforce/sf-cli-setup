@@ -39,6 +39,12 @@ jobs:
           node-version: 20
           cache: npm
 
+      - uses: actions/cache@v4
+        with:
+          path: '**/node_modules'
+          key: node_modules
+          restore-keys: node_modules
+
       - run: npm install
 
       - name: Run Plugin
