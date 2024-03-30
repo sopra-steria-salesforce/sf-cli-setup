@@ -28835,9 +28835,8 @@ class SalesforceCLI {
     }
     async install() {
         try {
-            // await this.download()
+            await this.download();
             // await this.installCli()
-            await (0, helper_1.execute)('npm install -g @salesforce/cli@2.34.7');
         }
         catch (error) {
             if (error instanceof Error) {
@@ -28888,6 +28887,9 @@ class SalesforceCLI {
         }
         core.info(cliPath);
         await (0, helper_1.execute)(`npm install ${workDir}/cli.tgz --omit dev --ignore-scripts`);
+        await (0, helper_1.execute)(`ls ${workDir}`);
+        await (0, helper_1.execute)(`ls`);
+        await (0, helper_1.execute)(`pwd`);
         // await execute(`ln -s ${cliExtractedFolder}/package/bin/run.js ${binDir}/sf`)
         // core.addPath(`${cliExtractedFolder}/package/bin`)
         core.addPath(`${workDir}/node_modules/.bin`);
