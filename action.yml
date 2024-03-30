@@ -48,6 +48,14 @@ inputs:
     description: Set the default org
     required: false
     default: 'false'
+outputs:
+  ready:
+    description: 'true if the Salesforce CLI is ready for use'
+  installed-from:
+    description:
+      'The source from which the Salesforce CLI was installed (either already-installed, tool-cache, cache or npm)'
+  authenticated:
+    description: 'true if the supplied user was authenticated'
 
 runs:
   using: node20
