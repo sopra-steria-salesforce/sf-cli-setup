@@ -34,7 +34,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        TO_INSTALL_VERSION:
+        SF_VERSION:
           - 2.33.3
           - 2.34.7
           - latest
@@ -43,12 +43,13 @@ jobs:
       - name: run 'sopra-steria-salesforce/sf-cli-setup' locally
         uses: ./
         with:
-          sf-cli-version: ${{ matrix.TO_INSTALL_VERSION }}
+          sf-cli-version: ${{ matrix.SF_VERSION }}
           use-cache: false
 
       - run: echo "INSTALLED_VERSION=$(sf --version)" >> $GITHUB_ENV
-      - run: exit 1
+      - name: '[TEST] sf version is correct (actual: ${{ env.INSTALLED_VERSION }}, expected: ${{ matrix.SF_VERSION }})'
         if: matrix.TO_INSTALL_VERSION != 'latest' && contains(env.INSTALLED_VERSION, matrix.TO_INSTALL_VERSION) == false
+        run: exit 1
 
   test-caching-job-1:
     name: test caching (job 1)
@@ -70,11 +71,18 @@ jobs:
           sf-cli-version: ${{ env.SF_VERSION }}
           use-cache: true
 
-      - run: sf --version
-      - run: exit 1
+      - name: '[TEST] sf command is ready'
+        run: sf --version
+      - run: echo "INSTALLED_VERSION=$(sf --version)" >> $GITHUB_ENV
+      - name: '[TEST] sf version is correct (actual: ${{ env.INSTALLED_VERSION }}, expected: ${{ env.SF_VERSION }})'
+        if: contains(env.INSTALLED_VERSION, env.SF_VERSION) == false
+        run: exit 1
+      - name: '[TEST] sf output is ready'
         if: contains(steps.setup.outputs.ready, 'true') == false
-      - run: exit 1
+        run: exit 1
+      - name: '[TEST] installed from npm'
         if: contains(steps.setup.outputs.installed-from, 'npm') == false
+        run: exit 1
 
       - name: run 'sopra-steria-salesforce/sf-cli-setup' locally
         uses: ./
@@ -83,14 +91,18 @@ jobs:
           sf-cli-version: ${{ env.SF_VERSION }}
           use-cache: true
 
-      - run: sf --version
+      - name: '[TEST] sf command is ready'
+        run: sf --version
       - run: echo "INSTALLED_VERSION=$(sf --version)" >> $GITHUB_ENV
-      - run: exit 1
+      - name: '[TEST] sf version is correct (actual: ${{ env.INSTALLED_VERSION }}, expected: ${{ env.SF_VERSION }})'
         if: contains(env.INSTALLED_VERSION, env.SF_VERSION) == false
-      - run: exit 1
+        run: exit 1
+      - name: '[TEST] sf output is ready'
         if: contains(steps.setup-2.outputs.ready, 'true') == false
-      - run: exit 1
+        run: exit 1
+      - name: '[TEST] already installed'
         if: contains(steps.setup-2.outputs.installed-from, 'already-installed') == false
+        run: exit 1
 
   test-caching-job-2:
     name: test caching
@@ -107,11 +119,15 @@ jobs:
           sf-cli-version: ${{ env.SF_VERSION }}
           use-cache: true
 
-      - run: sf --version
+      - name: '[TEST] sf command is ready'
+        run: sf --version
       - run: echo "INSTALLED_VERSION=$(sf --version)" >> $GITHUB_ENV
-      - run: exit 1
+      - name: '[TEST] sf version is correct (actual: ${{ env.INSTALLED_VERSION }}, expected: ${{ env.SF_VERSION }})'
         if: contains(env.INSTALLED_VERSION, env.SF_VERSION) == false
-      - run: exit 1
+        run: exit 1
+      - name: '[TEST] sf output is ready'
         if: contains(steps.setup.outputs.ready, 'true') == false
-      - run: exit 1
+        run: exit 1
+      - name: '[TEST] installed from cache'
         if: contains(steps.setup.outputs.installed-from, 'cache') == false
+        run: exit 1
