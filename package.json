@@ -15,7 +15,7 @@
     "sfdx"
   ],
   "exports": {
-    ".": "./dist/main.js"
+    ".": "./dist/index.js"
   },
   "engines": {
     "node": ">=20"
@@ -26,7 +26,7 @@
     "format:write": "prettier --write **/*.ts",
     "format:check": "prettier --check **/*.ts",
     "lint": "npx eslint . -c ./.github/linters/.eslintrc.yml",
-    "package": "ncc build src/main.ts --license licenses.txt",
+    "package": "ncc build src/main.ts --license licenses.txt --minify",
     "package:watch": "npm run package -- --watch",
     "all": "npm run format:write && npm run lint && npm run package"
   },
