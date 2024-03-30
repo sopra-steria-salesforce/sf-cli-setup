@@ -16,8 +16,8 @@ export const getInputs = (): IActionInputs => {
   const SET_DEFAULT_ORG: string = core.getInput('set-default-org', { required: false })
   return {
     SF_CLI_VERSION,
-    SAVE_CACHE,
-    RESTORE_CACHE,
+    SAVE_CACHE: SAVE_CACHE === 'true',
+    RESTORE_CACHE: RESTORE_CACHE === 'true',
     AUTH_URL,
     USERNAME,
     CLIENT_ID,

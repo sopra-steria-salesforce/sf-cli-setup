@@ -1,7 +1,7 @@
 export interface IActionInputs {
   SF_CLI_VERSION: string
-  SAVE_CACHE: string
-  RESTORE_CACHE: string
+  SAVE_CACHE: boolean
+  RESTORE_CACHE: boolean
   AUTH_URL: string
   USERNAME: string
   CLIENT_ID: string
