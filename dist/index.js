@@ -28817,9 +28817,27 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SalesforceCLI = void 0;
+// Load tempDirectory before it gets wiped by tool-cache
+let tempDirectory = process.env['RUNNER_TEMP'] || '';
 const core = __importStar(__nccwpck_require__(2186));
 const tc = __importStar(__nccwpck_require__(7784));
-const io = __importStar(__nccwpck_require__(7436));
+const path = __importStar(__nccwpck_require__(1017));
+if (!tempDirectory) {
+    let baseLocation;
+    if (process.platform === 'win32') {
+        // On windows use the USERPROFILE env variable
+        baseLocation = process.env['USERPROFILE'] || 'C:\\';
+    }
+    else {
+        if (process.platform === 'darwin') {
+            baseLocation = '/Users';
+        }
+        else {
+            baseLocation = '/home';
+        }
+    }
+    tempDirectory = path.join(baseLocation, 'actions', 'temp');
+}
 const helper_1 = __nccwpck_require__(2707);
 const action_inputs_1 = __nccwpck_require__(9437);
 class SalesforceCLI {
@@ -28843,15 +28861,15 @@ class SalesforceCLI {
         }
     }
     async download() {
-        const nodeDirectory = tc.find('sf-cli', '2.34.7');
-        if (nodeDirectory) {
-            return core.addPath(`${nodeDirectory}/node_modules/.bin`);
+        let toolPath;
+        toolPath = tc.find('sf-cli', '2.34.7');
+        if (!toolPath) {
+            const cliPath = await tc.downloadTool('https://registry.npmjs.org/@salesforce/cli/-/cli-2.34.7.tgz');
+            await (0, helper_1.execute)(`npm install ${cliPath} --omit dev --ignore-scripts`);
+            await (0, helper_1.execute)('ls');
+            toolPath = await tc.cacheDir(`node_modules`, 'sf-cli', '2.34.7');
         }
-        await io.mkdirP(this.SF_DIR);
-        const cliPath = await tc.downloadTool('https://registry.npmjs.org/@salesforce/cli/-/cli-2.34.7.tgz', `${this.SF_DIR}/cli.tgz`);
-        await (0, helper_1.execute)(`npm install --prefix ${this.SF_DIR} ${cliPath} --omit dev --ignore-scripts`);
-        const cachedPath = await tc.cacheDir(`${this.SF_DIR}`, 'sf-cli', '2.34.7');
-        core.addPath(`${cachedPath}/node_modules/.bin`);
+        core.addPath(`${toolPath}/.bin`);
     }
 }
 exports.SalesforceCLI = SalesforceCLI;
