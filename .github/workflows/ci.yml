@@ -64,7 +64,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - run: echo 'START=$(date +"%s")' >> $GITHUB_ENV
+      - run: echo "START=$(date +'%s')" >> $GITHUB_ENV
 
       - name: run 'sopra-steria-salesforce/sf-cli-setup' locally
         uses: ./
@@ -73,7 +73,7 @@ jobs:
           sf-cli-version: ${{ env.SF_VERSION }}
           use-cache: true
 
-      - run: echo 'END=$(date +"%s")' >> $GITHUB_ENV
+      - run: echo "END=$(date +'%s')" >> $GITHUB_ENV
       - run: echo "SECONDS=$((${{ env.END }} - ${{ env.START }}))"
       - name: '[TEST] load time should be slow'
         if: ${{ env.SECONDS < 10 }}
@@ -92,7 +92,7 @@ jobs:
         if: contains(steps.setup.outputs.installed-from, 'npm') == false
         run: exit 1
 
-      - run: echo 'START=$(date +"%s")' >> $GITHUB_ENV
+      - run: echo "START=$(date +'%s')" >> $GITHUB_ENV
 
       - name: run 'sopra-steria-salesforce/sf-cli-setup' locally
         uses: ./
@@ -101,7 +101,7 @@ jobs:
           sf-cli-version: ${{ env.SF_VERSION }}
           use-cache: true
 
-      - run: echo 'END=$(date +"%s")' >> $GITHUB_ENV
+      - run: echo "END=$(date +'%s')" >> $GITHUB_ENV
       - run: echo "SECONDS=$((${{ env.END }} - ${{ env.START }}))"
       - name: '[TEST] load time should be fast'
         if: ${{ env.SECONDS > 10 }}
@@ -129,7 +129,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - run: echo 'START=$(date +"%s")' >> $GITHUB_ENV
+      - run: echo "START=$(date +'%s')" >> $GITHUB_ENV
 
       - name: run 'sopra-steria-salesforce/sf-cli-setup' locally
         uses: ./
@@ -138,7 +138,7 @@ jobs:
           sf-cli-version: ${{ env.SF_VERSION }}
           use-cache: true
 
-      - run: echo 'END=$(date +"%s")' >> $GITHUB_ENV
+      - run: echo "END=$(date +'%s')" >> $GITHUB_ENV
       - run: echo "SECONDS=$((${{ env.END }} - ${{ env.START }}))"
       - name: '[TEST] load time should be fast'
         if: ${{ env.SECONDS > 10 }}
