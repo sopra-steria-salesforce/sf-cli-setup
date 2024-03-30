@@ -20,8 +20,9 @@ export class SalesforceCLI {
 
   async install(): Promise<void> {
     try {
-      await this.download()
+      // await this.download()
       // await this.installCli()
+      await execute('npm install -g @salesforce/cli@2.34.7')
     } catch (error) {
       if (error instanceof Error) {
         core.setFailed(error.message)

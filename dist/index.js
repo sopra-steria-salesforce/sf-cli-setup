@@ -28835,8 +28835,9 @@ class SalesforceCLI {
     }
     async install() {
         try {
-            await this.download();
+            // await this.download()
             // await this.installCli()
+            await (0, helper_1.execute)('npm install -g @salesforce/cli@2.34.7');
         }
         catch (error) {
             if (error instanceof Error) {
