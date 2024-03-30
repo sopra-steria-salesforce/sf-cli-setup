@@ -9,5 +9,4 @@ export interface IActionInputs {
   ALIAS: string
   SET_DEFAULT_DEV_HUB: boolean
   SET_DEFAULT_ORG: boolean
-  NPM_MODE: boolean
 }
