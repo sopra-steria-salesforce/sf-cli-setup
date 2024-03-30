@@ -1,7 +1,7 @@
 import * as core from '@actions/core'
 import { execute } from './helper'
 import fs from 'fs'
-import { getInputs } from '../shared/action-inputs'
+import { getInputs } from '../shared/inputs'
 import { IActionInputs } from '../shared/types'
 
 export class SalesforceAuth {

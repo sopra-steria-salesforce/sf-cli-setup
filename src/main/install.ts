@@ -22,7 +22,7 @@ import * as core from '@actions/core'
 import * as tc from '@actions/tool-cache'
 import * as io from '@actions/io'
 import { execute } from './helper'
-import { getInputs } from '../shared/action-inputs'
+import { getInputs } from '../shared/inputs'
 import { restoreCache } from '../cache/restore'
 /* eslint-enable import/first */
 
@@ -31,6 +31,9 @@ export class SalesforceCLI {
 
   constructor() {
     this.SF_CLI_VERSION = getInputs().SF_CLI_VERSION
+
+    if (!this.SF_CLI_VERSION) {
+    }
   }
 
   async install(): Promise<void> {

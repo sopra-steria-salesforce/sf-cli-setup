@@ -1,4 +1,4 @@
-import { getInputs } from '../shared/action-inputs'
+import { getInputs } from '../shared/inputs'
 
 const version = getInputs().SF_CLI_VERSION
 const platform = process.env.RUNNER_OS
