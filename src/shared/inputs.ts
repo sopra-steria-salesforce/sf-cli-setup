@@ -3,8 +3,7 @@ import { IActionInputs } from './types'
 
 export const getInputs = (): IActionInputs => {
     const SF_CLI_VERSION: string = core.getInput('sf-cli-version', { required: false })
-    const SAVE_CACHE: string = core.getInput('save-cache', { required: false })
-    const RESTORE_CACHE: string = core.getInput('restore-cache', { required: false })
+    const USE_CACHE: string = core.getInput('use-cache', { required: false })
     const AUTH_URL: string = core.getInput('auth-url', { required: false })
     const USERNAME = core.getInput('username', { required: false })
     const CLIENT_ID: string = core.getInput('client-id', { required: false })
@@ -17,8 +16,7 @@ export const getInputs = (): IActionInputs => {
 
     return {
         SF_CLI_VERSION,
-        SAVE_CACHE: SAVE_CACHE === 'true',
-        RESTORE_CACHE: RESTORE_CACHE === 'true',
+        USE_CACHE: USE_CACHE === 'true',
         AUTH_URL,
         USERNAME,
         CLIENT_ID,

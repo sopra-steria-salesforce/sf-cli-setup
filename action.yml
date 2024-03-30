@@ -11,12 +11,8 @@ inputs:
     description: sf cli version number. Specify a version number (x.x.x) or empty for the latest version
     required: false
     default: latest
-  save-cache:
-    description: Cache the Salesforce CLI for faster installation in other jobs (recommended to save in main brach)
-    required: false
-    default: 'true'
-  restore-cache:
-    description: Use cache of the Salesforce CLI (if existing) for faster installation
+  use-cache:
+    description: Use GitHub cache for faster installation of the Salesforce CLI
     required: false
     default: 'true'
   auth-url:

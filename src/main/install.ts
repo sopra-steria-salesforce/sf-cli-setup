@@ -60,7 +60,7 @@ export class SalesforceCLI {
         }
 
         // Restore the sf cli from GitHub cache (faster than npm install)
-        if (!toolPath && this.input.RESTORE_CACHE) {
+        if (!toolPath && this.input.USE_CACHE) {
             core.info(`Checking for sf cli with version ${this.input.SF_CLI_VERSION} in GitHub cache...`)
             await restoreCache()
             toolPath = tc.find('sf-cli', this.input.SF_CLI_VERSION)
