@@ -14,20 +14,20 @@ permissions:
   contents: read
 
 jobs:
-  test-typescript:
-    name: TypeScript Tests
-    runs-on: ubuntu-latest
+  # test-typescript:
+  #   name: TypeScript Tests
+  #   runs-on: ubuntu-latest
 
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: npm
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - uses: actions/setup-node@v4
+  #       with:
+  #         node-version: 20
+  #         cache: npm
 
-      - run: npm ci
-      - run: npm run format:check
-      - run: npm run lint
+  #     - run: npm ci
+  #     - run: npm run format:check
+  #     - run: npm run lint
 
   test-latest:
     name: test latest

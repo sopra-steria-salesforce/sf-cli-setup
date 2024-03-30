@@ -1,10 +1,6 @@
 // Load tempDirectory before it gets wiped by tool-cache
 let tempDirectory = process.env['RUNNER_TEMP'] || ''
 
-import * as core from '@actions/core'
-import * as exec from '@actions/exec'
-import * as tc from '@actions/tool-cache'
-import * as io from '@actions/io'
 import * as path from 'path'
 
 if (!tempDirectory) {
@@ -21,6 +17,11 @@ if (!tempDirectory) {
   }
   tempDirectory = path.join(baseLocation, 'actions', 'temp')
 }
+
+import * as core from '@actions/core'
+import * as exec from '@actions/exec'
+import * as tc from '@actions/tool-cache'
+import io = require('@actions/io')
 
 import { execute } from './helper'
 import { getInputs } from './action-inputs'
@@ -49,18 +50,21 @@ export class SalesforceCLI {
   }
 
   private async download(): Promise<void> {
+    const p = path.join(tempDirectory, 'sf')
+    await io.mkdirP(p)
+
     let toolPath: string
-    toolPath = tc.find('sf-cli', '2.34.7')
+    toolPath = tc.find('sf-cli', '2.34.7', 'x64')
 
     if (!toolPath) {
-      const cliPath = await tc.downloadTool('https://registry.npmjs.org/@salesforce/cli/-/cli-2.34.7.tgz')
-
-      await execute(`npm install ${cliPath} --omit dev --ignore-scripts`)
+      await execute(`npm --global --prefix ${p} install @salesforce/cli@2.34.7`)
       await execute('ls')
-      toolPath = await tc.cacheDir(`node_modules`, 'sf-cli', '2.34.7')
+      await execute(`ts ${p}`)
+      await execute(`ts ${p}/bin`)
+      toolPath = await tc.cacheDir(p, 'sf-cli', '2.34.7', 'x64')
     }
 
-    core.addPath(`${toolPath}/.bin`)
+    core.addPath(`${toolPath}/bin`)
   }
 
   // private async installCli(): Promise<void> {
