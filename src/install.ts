@@ -37,66 +37,58 @@ export class SalesforceCLI {
       'https://registry.npmjs.org/@salesforce/cli/-/cli-2.34.7.tgz',
       `${this.SF_DIR}/cli.tgz`
     )
-    // const cliExtractedFolder = await tc.extractTar(cliPath, tempDir)
-    // await execute(`ls -a ${cliExtractedFolder}/package`)
-    // await execute(`chmod +x ${cliExtractedFolder}/package/bin/run.js`)
 
-    if (process.platform === 'win32') {
-    } else {
-    }
-
-    core.info(cliPath)
-    await execute(`npm install --prefix ${this.SF_DIR} ${this.SF_DIR}/cli.tgz --omit dev --ignore-scripts`)
-    await execute(`ls ${this.SF_DIR}`)
-    core.addPath(`${this.SF_DIR}/node_modules/.bin`)
+    await execute(`npm install --prefix ${this.SF_DIR} ${cliPath}`)
+    const cachedPath = await tc.cacheDir(`${this.SF_DIR}`, 'sf-cli', '2.34.7')
+    core.addPath(`${cachedPath}/node_modules/.bin`)
   }
 
-  private async installCli(): Promise<void> {
-    if (this.NPM_MODE) {
-      core.info('Salesforce CLI is installed locally using npm, skipping installation.')
-      return await this.addToPath()
-    }
+  // private async installCli(): Promise<void> {
+  //   if (this.NPM_MODE) {
+  //     core.info('Salesforce CLI is installed locally using npm, skipping installation.')
+  //     return await this.addToPath()
+  //   }
 
-    if (await this.isAlreadyInstalled()) {
-      return core.info('Salesforce CLI is already installed globally, skipping installation.')
-    }
+  //   if (await this.isAlreadyInstalled()) {
+  //     return core.info('Salesforce CLI is already installed globally, skipping installation.')
+  //   }
 
-    await this.installGlobally(this.SF_CLI_VERSION || 'latest')
-  }
+  //   await this.installGlobally(this.SF_CLI_VERSION || 'latest')
+  // }
 
-  private async installGlobally(version: string): Promise<void> {
-    await execute(`npm install --global @salesforce/cli@${version}`)
-    core.info(`Installed Salesforce CLI globally with version '${version}'`)
-  }
+  // private async installGlobally(version: string): Promise<void> {
+  //   await execute(`npm install --global @salesforce/cli@${version}`)
+  //   core.info(`Installed Salesforce CLI globally with version '${version}'`)
+  // }
 
-  private async addToPath(): Promise<void> {
-    if (await this.isAlreadyAddedToPath()) {
-      return core.info('Salesforce CLI is already added to path, skipping.')
-    }
+  // private async addToPath(): Promise<void> {
+  //   if (await this.isAlreadyAddedToPath()) {
+  //     return core.info('Salesforce CLI is already added to path, skipping.')
+  //   }
 
-    core.addPath('./node_modules/.bin/sf-cli')
-    core.info('Added local npm installation of Salesforce CLI to path, `sf` is ready for use.')
-  }
+  //   core.addPath('./node_modules/.bin/sf-cli')
+  //   core.info('Added local npm installation of Salesforce CLI to path, `sf` is ready for use.')
+  // }
 
-  /* -------------------------------------------------------------------------- */
-  /*                                   helpers                                  */
-  /* -------------------------------------------------------------------------- */
+  // /* -------------------------------------------------------------------------- */
+  // /*                                   helpers                                  */
+  // /* -------------------------------------------------------------------------- */
 
-  private async isAlreadyInstalled(): Promise<boolean> {
-    try {
-      await exec.exec('npm ls --global @salesforce/cli')
-      return true
-    } catch (error) {
-      return false
-    }
-  }
+  // private async isAlreadyInstalled(): Promise<boolean> {
+  //   try {
+  //     await exec.exec('npm ls --global @salesforce/cli')
+  //     return true
+  //   } catch (error) {
+  //     return false
+  //   }
+  // }
 
-  private async isAlreadyAddedToPath(): Promise<boolean> {
-    try {
-      await exec.exec('sf')
-      return true
-    } catch (error) {
-      return false
-    }
-  }
+  // private async isAlreadyAddedToPath(): Promise<boolean> {
+  //   try {
+  //     await exec.exec('sf')
+  //     return true
+  //   } catch (error) {
+  //     return false
+  //   }
+  // }
 }

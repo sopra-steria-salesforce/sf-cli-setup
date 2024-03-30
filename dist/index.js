@@ -28818,7 +28818,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SalesforceCLI = void 0;
 const core = __importStar(__nccwpck_require__(2186));
-const exec = __importStar(__nccwpck_require__(1514));
 const tc = __importStar(__nccwpck_require__(7784));
 const io = __importStar(__nccwpck_require__(7436));
 const helper_1 = __nccwpck_require__(2707);
@@ -28846,59 +28845,9 @@ class SalesforceCLI {
     async download() {
         await io.mkdirP(this.SF_DIR);
         const cliPath = await tc.downloadTool('https://registry.npmjs.org/@salesforce/cli/-/cli-2.34.7.tgz', `${this.SF_DIR}/cli.tgz`);
-        // const cliExtractedFolder = await tc.extractTar(cliPath, tempDir)
-        // await execute(`ls -a ${cliExtractedFolder}/package`)
-        // await execute(`chmod +x ${cliExtractedFolder}/package/bin/run.js`)
-        if (process.platform === 'win32') {
-        }
-        else {
-        }
-        core.info(cliPath);
-        await (0, helper_1.execute)(`npm install --prefix ${this.SF_DIR} ${this.SF_DIR}/cli.tgz --omit dev --ignore-scripts`);
-        await (0, helper_1.execute)(`ls ${this.SF_DIR}`);
-        core.addPath(`${this.SF_DIR}/node_modules/.bin`);
-    }
-    async installCli() {
-        if (this.NPM_MODE) {
-            core.info('Salesforce CLI is installed locally using npm, skipping installation.');
-            return await this.addToPath();
-        }
-        if (await this.isAlreadyInstalled()) {
-            return core.info('Salesforce CLI is already installed globally, skipping installation.');
-        }
-        await this.installGlobally(this.SF_CLI_VERSION || 'latest');
-    }
-    async installGlobally(version) {
-        await (0, helper_1.execute)(`npm install --global @salesforce/cli@${version}`);
-        core.info(`Installed Salesforce CLI globally with version '${version}'`);
-    }
-    async addToPath() {
-        if (await this.isAlreadyAddedToPath()) {
-            return core.info('Salesforce CLI is already added to path, skipping.');
-        }
-        core.addPath('./node_modules/.bin/sf-cli');
-        core.info('Added local npm installation of Salesforce CLI to path, `sf` is ready for use.');
-    }
-    /* -------------------------------------------------------------------------- */
-    /*                                   helpers                                  */
-    /* -------------------------------------------------------------------------- */
-    async isAlreadyInstalled() {
-        try {
-            await exec.exec('npm ls --global @salesforce/cli');
-            return true;
-        }
-        catch (error) {
-            return false;
-        }
-    }
-    async isAlreadyAddedToPath() {
-        try {
-            await exec.exec('sf');
-            return true;
-        }
-        catch (error) {
-            return false;
-        }
+        await (0, helper_1.execute)(`npm install --prefix ${this.SF_DIR} ${cliPath}`);
+        const cachedPath = await tc.cacheDir(`${this.SF_DIR}`, 'sf-cli', '2.34.7');
+        core.addPath(`${cachedPath}/node_modules/.bin`);
     }
 }
 exports.SalesforceCLI = SalesforceCLI;
