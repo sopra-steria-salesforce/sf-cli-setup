@@ -2,7 +2,7 @@ import * as core from '@actions/core'
 import { IActionInputs } from './types'
 
 export const getInputs = (): IActionInputs => {
-    const SF_CLI_VERSION: string = core.getInput('sf-cli-version', { required: false })
+    const SF_CLI_VERSION: string = core.getInput('sf-cli-version', { required: true })
     const USE_CACHE: string = core.getInput('use-cache', { required: false })
     const AUTH_URL: string = core.getInput('auth-url', { required: false })
     const USERNAME = core.getInput('username', { required: false })

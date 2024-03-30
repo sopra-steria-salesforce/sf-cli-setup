@@ -9,8 +9,7 @@ branding:
 inputs:
   sf-cli-version:
     description: sf cli version number. Specify a version number (x.x.x) or empty for the latest version
-    required: false
-    default: latest
+    required: true
   use-cache:
     description: Use GitHub cache for faster installation of the Salesforce CLI
     required: false
@@ -48,8 +47,7 @@ outputs:
   ready:
     description: 'true if the Salesforce CLI is ready for use'
   installed-from:
-    description:
-      'The source from which the Salesforce CLI was installed (either already-installed, tool-cache, cache or npm)'
+    description: 'The source from which the Salesforce CLI was installed (either already-installed, tool-cache, cache or npm)'
   authenticated:
     description: 'true if the supplied user was authenticated'
 

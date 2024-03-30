@@ -6,8 +6,7 @@ const tool_cache_folder = '/opt/hostedtoolcache'
 const tool_cache_name = 'sf-cli'
 
 export const cachePaths = [`${tool_cache_folder}/${tool_cache_name}`]
-export const keyPrefix = `salesforce/cli@v${version}-${platform}`
-export const primaryKey = `${keyPrefix}`
+export const primaryKey = `salesforce/cli@v${version}`
 
 export enum Outputs {
     READY = 'ready',
