@@ -23,10 +23,12 @@ import * as tc from '@actions/tool-cache'
 import * as io from '@actions/io'
 import { execute } from './helper'
 import { getInputs } from '../shared/action-inputs'
+import { restoreCache } from '../cache/restore'
 /* eslint-enable import/first */
 
 export class SalesforceCLI {
   SF_CLI_VERSION: string
+  CACHE_RESTORED = false
 
   constructor() {
     this.SF_CLI_VERSION = getInputs().SF_CLI_VERSION
@@ -49,6 +51,12 @@ export class SalesforceCLI {
     await io.mkdirP(tmp)
 
     let toolPath: string = tc.find('sf-cli', this.SF_CLI_VERSION)
+
+    if (!toolPath && !this.CACHE_RESTORED) {
+      await restoreCache()
+      this.CACHE_RESTORED = true
+      toolPath = tc.find('sf-cli', this.SF_CLI_VERSION)
+    }
 
     if (!toolPath) {
       await execute(`npm --global --prefix ${tmp} install @salesforce/cli@${this.SF_CLI_VERSION}`)
