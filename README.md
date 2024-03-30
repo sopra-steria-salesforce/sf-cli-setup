@@ -8,7 +8,7 @@ This action allows to use the Salesforce cli from GitHub Actions, and easily aut
 
 ## Required or Optional
 
-Every input is optional. However, not using any will result in nothing happening.
+Every input (except `sf-cli-version`) is optional. If no authentication details are added, only the cli is installed without any authentication.
 
 ## General
 
