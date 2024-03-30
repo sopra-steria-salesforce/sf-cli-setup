@@ -28854,7 +28854,7 @@ class SalesforceCLI {
         else {
         }
         core.info(cliPath);
-        await (0, helper_1.execute)(`npm install ${this.SF_DIR}/cli.tgz ${this.SF_DIR} --omit dev --ignore-scripts`);
+        await (0, helper_1.execute)(`npm install --prefix ${this.SF_DIR} ${this.SF_DIR}/cli.tgz --omit dev --ignore-scripts`);
         await (0, helper_1.execute)(`ls ${this.SF_DIR}`);
         core.addPath(`${this.SF_DIR}/node_modules/.bin`);
     }
