@@ -33,6 +33,9 @@ const cachePackages = async (): Promise<void> => {
     const primaryKey = core.getState(State.CachePrimaryKey)
     const cachePaths = JSON.parse(core.getState(State.CachePaths) || '[]') as string[]
 
+    core.debug('test')
+    core.debug(core.getState(State.CachePaths))
+
     if (!cachePaths.length) {
         throw new Error(`Cache folder paths were not retrieved`)
     }
