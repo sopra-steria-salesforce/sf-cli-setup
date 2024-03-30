@@ -12,7 +12,6 @@ export const getInputs = (): IActionInputs => {
   const ALIAS: string = core.getInput('alias:', { required: false })
   const SET_DEFAULT_DEV_HUB: string = core.getInput('set-default-dev-hub', { required: false })
   const SET_DEFAULT_ORG: string = core.getInput('set-default-org', { required: false })
-  const NPM_MODE: string = core.getInput('npm-mode', { required: false })
   return {
     SF_CLI_VERSION,
     AUTH_URL,
@@ -23,7 +22,6 @@ export const getInputs = (): IActionInputs => {
     ACCESS_TOKEN,
     ALIAS,
     SET_DEFAULT_DEV_HUB: SET_DEFAULT_DEV_HUB === 'true',
-    SET_DEFAULT_ORG: SET_DEFAULT_ORG === 'true',
-    NPM_MODE: NPM_MODE === 'true'
+    SET_DEFAULT_ORG: SET_DEFAULT_ORG === 'true'
   }
 }

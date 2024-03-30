@@ -45,18 +45,14 @@ export class SalesforceCLI {
   }
 
   private async installCli(): Promise<void> {
-    const p = path.join(tempDirectory, 'sf')
-    await io.mkdirP(p)
+    const tmp = path.join(tempDirectory, 'sf')
+    await io.mkdirP(tmp)
 
-    let toolPath: string
-    toolPath = tc.find('sf-cli', '2.34.7', 'x64')
+    let toolPath: string = tc.find('sf-cli', this.SF_CLI_VERSION)
 
     if (!toolPath) {
-      await execute(`npm --global --prefix ${p} install @salesforce/cli@2.34.7`)
-      await execute('ls')
-      await execute(`ls ${p}`)
-      await execute(`ls ${p}/bin`)
-      toolPath = await tc.cacheDir(p, 'sf-cli', '2.34.7', 'x64')
+      await execute(`npm --global --prefix ${tmp} install @salesforce/cli@${this.SF_CLI_VERSION}`)
+      toolPath = await tc.cacheDir(tmp, 'sf-cli', this.SF_CLI_VERSION)
     }
 
     core.addPath(`${toolPath}/bin`)
