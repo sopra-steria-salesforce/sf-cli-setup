@@ -66,10 +66,13 @@ export class SalesforceCLI {
 
   private async download(): Promise<void> {
     const workDir = await this.createWorkDir()
-    const tempDir = await this.createTempDir(workDir)
-    const binDir = await this.createBinDir(workDir)
+    // const tempDir = await this.createTempDir(workDir)
+    // const binDir = await this.createBinDir(workDir)
 
-    const cliPath = await tc.downloadTool('https://registry.npmjs.org/@salesforce/cli/-/cli-2.34.7.tgz', workDir)
+    const cliPath = await tc.downloadTool(
+      'https://registry.npmjs.org/@salesforce/cli/-/cli-2.34.7.tgz',
+      `${workDir}/cli.tgz`
+    )
     // const cliExtractedFolder = await tc.extractTar(cliPath, tempDir)
     // await execute(`ls -a ${cliExtractedFolder}/package`)
     // await execute(`chmod +x ${cliExtractedFolder}/package/bin/run.js`)
@@ -78,7 +81,8 @@ export class SalesforceCLI {
     } else {
     }
 
-    await execute(`npm install ${cliPath} --omit dev --ignore-scripts`)
+    core.info(cliPath)
+    await execute(`npm install ${workDir}/cli.tgz --omit dev --ignore-scripts`)
     // await execute(`ln -s ${cliExtractedFolder}/package/bin/run.js ${binDir}/sf`)
     // core.addPath(`${cliExtractedFolder}/package/bin`)
     core.addPath(`${workDir}/node_modules/.bin`)
