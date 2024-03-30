@@ -1,8 +1,6 @@
 // Load tempDirectory before it gets wiped by tool-cache
 let tempDirectory = process.env['RUNNER_TEMP'] || ''
 
-import * as path from 'path'
-
 if (!tempDirectory) {
   let baseLocation
   if (process.platform === 'win32') {
@@ -18,14 +16,14 @@ if (!tempDirectory) {
   tempDirectory = path.join(baseLocation, 'actions', 'temp')
 }
 
+/* eslint-disable import/first */
+import * as path from 'path'
 import * as core from '@actions/core'
-import * as exec from '@actions/exec'
 import * as tc from '@actions/tool-cache'
-import io = require('@actions/io')
-
+import * as io from '@actions/io'
 import { execute } from './helper'
 import { getInputs } from './action-inputs'
-import { Action } from './types'
+/* eslint-enable import/first */
 
 export class SalesforceCLI {
   SF_CLI_VERSION: string

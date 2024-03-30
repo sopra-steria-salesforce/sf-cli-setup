@@ -28819,7 +28819,6 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SalesforceCLI = void 0;
 // Load tempDirectory before it gets wiped by tool-cache
 let tempDirectory = process.env['RUNNER_TEMP'] || '';
-const path = __importStar(__nccwpck_require__(1017));
 if (!tempDirectory) {
     let baseLocation;
     if (process.platform === 'win32') {
@@ -28836,11 +28835,14 @@ if (!tempDirectory) {
     }
     tempDirectory = path.join(baseLocation, 'actions', 'temp');
 }
+/* eslint-disable import/first */
+const path = __importStar(__nccwpck_require__(1017));
 const core = __importStar(__nccwpck_require__(2186));
 const tc = __importStar(__nccwpck_require__(7784));
-const io = __nccwpck_require__(7436);
+const io = __importStar(__nccwpck_require__(7436));
 const helper_1 = __nccwpck_require__(2707);
 const action_inputs_1 = __nccwpck_require__(9437);
+/* eslint-enable import/first */
 class SalesforceCLI {
     SF_CLI_VERSION;
     constructor() {

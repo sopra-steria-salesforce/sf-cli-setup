@@ -11,8 +11,3 @@ export interface IActionInputs {
   SET_DEFAULT_ORG: boolean
   NPM_MODE: boolean
 }
-
-export enum Action {
-  WorkDirName = 'actions_sf_cli',
-  TempDirName = '_temp'
-}
