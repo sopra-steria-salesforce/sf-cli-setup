@@ -76,7 +76,7 @@ jobs:
       - run: echo "END=$(date +'%s')" >> $GITHUB_ENV
       - run: echo "SECONDS=$((${{ env.END }} - ${{ env.START }}))"
       - name: '[TEST] load time should be slow'
-        if: ${{ env.SECONDS < 10 }}
+        if: ${{ toJSON(env.SECONDS) < 10 }}
         run: exit 1
 
       - name: '[TEST] sf command is ready'
@@ -104,7 +104,7 @@ jobs:
       - run: echo "END=$(date +'%s')" >> $GITHUB_ENV
       - run: echo "SECONDS=$((${{ env.END }} - ${{ env.START }}))"
       - name: '[TEST] load time should be fast'
-        if: ${{ env.SECONDS > 10 }}
+        if: ${{ toJSON(env.SECONDS) > 10 }}
         run: exit 1
 
       - name: '[TEST] sf command is ready'
@@ -141,7 +141,7 @@ jobs:
       - run: echo "END=$(date +'%s')" >> $GITHUB_ENV
       - run: echo "SECONDS=$((${{ env.END }} - ${{ env.START }}))"
       - name: '[TEST] load time should be fast'
-        if: ${{ env.SECONDS > 10 }}
+        if: ${{ toJSON(env.SECONDS) > 10 }}
         run: exit 1
 
       - name: '[TEST] sf command is ready'
