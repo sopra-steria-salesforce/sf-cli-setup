@@ -3,7 +3,7 @@ import { execute } from './helper'
 import fs from 'fs'
 import { getInputs } from '../shared/inputs'
 import { IActionInputs } from '../shared/types'
-import { Outputs } from 'src/cache/constants'
+import { Outputs } from '../cache/constants'
 
 export class SalesforceAuth {
     inputs: IActionInputs

@@ -25,7 +25,7 @@ import { execute } from './helper'
 import { getInputs } from '../shared/inputs'
 import { restoreCache } from '../cache/restore'
 import { IActionInputs } from '../shared/types'
-import { Outputs } from 'src/cache/constants'
+import { Outputs } from '../cache/constants'
 /* eslint-enable import/first */
 
 export class SalesforceCLI {
