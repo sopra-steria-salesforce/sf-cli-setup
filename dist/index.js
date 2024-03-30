@@ -28875,19 +28875,21 @@ class SalesforceCLI {
     }
     async download() {
         const workDir = await this.createWorkDir();
-        const binDir = await this.createBinDir(workDir);
         const tempDir = await this.createTempDir(workDir);
-        const cliPath = await tc.downloadTool('https://registry.npmjs.org/@salesforce/cli/-/cli-2.34.7.tgz');
-        const cliExtractedFolder = await tc.extractTar(cliPath, tempDir);
-        await (0, helper_1.execute)(`ls -a ${cliExtractedFolder}/package`);
-        await (0, helper_1.execute)(`chmod +x ${cliExtractedFolder}/package/bin/run.js`);
+        const binDir = await this.createBinDir(workDir);
+        const cliPath = await tc.downloadTool('https://registry.npmjs.org/@salesforce/cli/-/cli-2.34.7.tgz', workDir);
+        // const cliExtractedFolder = await tc.extractTar(cliPath, tempDir)
+        // await execute(`ls -a ${cliExtractedFolder}/package`)
+        // await execute(`chmod +x ${cliExtractedFolder}/package/bin/run.js`)
         if (process.platform === 'win32') {
         }
         else {
         }
-        await (0, helper_1.execute)(`ln -s ${cliExtractedFolder}/package/bin/run.js ${binDir}/sf`);
-        core.addPath(`${cliExtractedFolder}/package/bin`);
-        await (0, helper_1.execute)(`chmod +x ${binDir}/sf`);
+        await (0, helper_1.execute)(`npm install ${cliPath} --omit dev --ignore-scripts`);
+        // await execute(`ln -s ${cliExtractedFolder}/package/bin/run.js ${binDir}/sf`)
+        // core.addPath(`${cliExtractedFolder}/package/bin`)
+        core.addPath(`${workDir}/node_modules/.bin`);
+        // await execute(`chmod +x ${binDir}/sf`)
         // await io.mv(toolBin, binDir)
     }
     async installCli() {
