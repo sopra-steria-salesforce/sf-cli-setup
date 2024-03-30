@@ -22,7 +22,7 @@ import * as core from '@actions/core'
 import * as tc from '@actions/tool-cache'
 import * as io from '@actions/io'
 import { execute } from './helper'
-import { getInputs } from './action-inputs'
+import { getInputs } from '../shared/action-inputs'
 /* eslint-enable import/first */
 
 export class SalesforceCLI {

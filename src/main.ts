@@ -1,5 +1,5 @@
-import { SalesforceCLI } from './install'
-import { SalesforceAuth } from './auth'
+import { SalesforceCLI } from './main/install'
+import { SalesforceAuth } from './main/auth'
 
 export async function run(): Promise<void> {
   const cli = new SalesforceCLI()
