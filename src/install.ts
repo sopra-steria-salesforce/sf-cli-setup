@@ -38,7 +38,7 @@ export class SalesforceCLI {
       `${this.SF_DIR}/cli.tgz`
     )
 
-    await execute(`npm install --prefix ${this.SF_DIR} ${cliPath}`)
+    await execute(`npm install --prefix ${this.SF_DIR} ${cliPath} --omit dev --ignore-scripts`)
     const cachedPath = await tc.cacheDir(`${this.SF_DIR}`, 'sf-cli', '2.34.7')
     core.addPath(`${cachedPath}/node_modules/.bin`)
   }
