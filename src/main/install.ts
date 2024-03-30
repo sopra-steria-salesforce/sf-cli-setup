@@ -28,7 +28,6 @@ import { restoreCache } from '../cache/restore'
 
 export class SalesforceCLI {
   SF_CLI_VERSION: string
-  CACHE_RESTORED = false
 
   constructor() {
     this.SF_CLI_VERSION = getInputs().SF_CLI_VERSION
@@ -52,9 +51,8 @@ export class SalesforceCLI {
 
     let toolPath: string = tc.find('sf-cli', this.SF_CLI_VERSION)
 
-    if (!toolPath && !this.CACHE_RESTORED) {
+    if (!toolPath) {
       await restoreCache()
-      this.CACHE_RESTORED = true
       toolPath = tc.find('sf-cli', this.SF_CLI_VERSION)
     }
 
