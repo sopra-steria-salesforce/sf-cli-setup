@@ -28821,13 +28821,12 @@ const core = __importStar(__nccwpck_require__(2186));
 const exec = __importStar(__nccwpck_require__(1514));
 const tc = __importStar(__nccwpck_require__(7784));
 const io = __importStar(__nccwpck_require__(7436));
-const path = __importStar(__nccwpck_require__(1017));
 const helper_1 = __nccwpck_require__(2707);
 const action_inputs_1 = __nccwpck_require__(9437);
-const types_1 = __nccwpck_require__(5077);
 class SalesforceCLI {
     SF_CLI_VERSION;
     NPM_MODE;
+    SF_DIR = '/home/runner/sf';
     constructor() {
         const { SF_CLI_VERSION, NPM_MODE } = (0, action_inputs_1.getInputs)();
         this.SF_CLI_VERSION = SF_CLI_VERSION;
@@ -28844,40 +28843,9 @@ class SalesforceCLI {
             }
         }
     }
-    getHomeDir() {
-        let homedir = '';
-        if (process.platform === 'win32') {
-            homedir = process.env['USERPROFILE'] || 'C:\\';
-        }
-        else {
-            homedir = `${process.env.HOME}`;
-        }
-        core.debug(`homeDir: ${homedir}`);
-        return homedir;
-    }
-    async createWorkDir() {
-        const workDir = path.join(this.getHomeDir(), types_1.Action.WorkDirName);
-        await io.mkdirP(workDir);
-        core.debug(`workDir: ${workDir}`);
-        return workDir;
-    }
-    async createTempDir(workDir) {
-        const tempDir = path.join(workDir, types_1.Action.TempDirName);
-        await io.mkdirP(tempDir);
-        core.debug(`tempDir: ${tempDir}`);
-        return tempDir;
-    }
-    async createBinDir(workDir) {
-        const binDir = path.join(workDir, 'bin');
-        await io.mkdirP(binDir);
-        core.debug(`binDir: ${binDir}`);
-        return binDir;
-    }
     async download() {
-        const workDir = await this.createWorkDir();
-        // const tempDir = await this.createTempDir(workDir)
-        // const binDir = await this.createBinDir(workDir)
-        const cliPath = await tc.downloadTool('https://registry.npmjs.org/@salesforce/cli/-/cli-2.34.7.tgz', `${workDir}/cli.tgz`);
+        await io.mkdirP(this.SF_DIR);
+        const cliPath = await tc.downloadTool('https://registry.npmjs.org/@salesforce/cli/-/cli-2.34.7.tgz', `${this.SF_DIR}/cli.tgz`);
         // const cliExtractedFolder = await tc.extractTar(cliPath, tempDir)
         // await execute(`ls -a ${cliExtractedFolder}/package`)
         // await execute(`chmod +x ${cliExtractedFolder}/package/bin/run.js`)
@@ -28886,15 +28854,9 @@ class SalesforceCLI {
         else {
         }
         core.info(cliPath);
-        await (0, helper_1.execute)(`npm install ${workDir}/cli.tgz --omit dev --ignore-scripts`);
-        await (0, helper_1.execute)(`ls ${workDir}`);
-        await (0, helper_1.execute)(`ls`);
-        await (0, helper_1.execute)(`pwd`);
-        // await execute(`ln -s ${cliExtractedFolder}/package/bin/run.js ${binDir}/sf`)
-        // core.addPath(`${cliExtractedFolder}/package/bin`)
-        core.addPath(`${workDir}/node_modules/.bin`);
-        // await execute(`chmod +x ${binDir}/sf`)
-        // await io.mv(toolBin, binDir)
+        await (0, helper_1.execute)(`npm install ${this.SF_DIR}/cli.tgz ${this.SF_DIR} --omit dev --ignore-scripts`);
+        await (0, helper_1.execute)(`ls ${this.SF_DIR}`);
+        core.addPath(`${this.SF_DIR}/node_modules/.bin`);
     }
     async installCli() {
         if (this.NPM_MODE) {
@@ -28960,22 +28922,6 @@ async function run() {
     await sf.auth();
 }
 exports.run = run;
-
-
-/***/ }),
-
-/***/ 5077:
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.Action = void 0;
-var Action;
-(function (Action) {
-    Action["WorkDirName"] = "actions_sf_cli";
-    Action["TempDirName"] = "_temp";
-})(Action || (exports.Action = Action = {}));
 
 
 /***/ }),

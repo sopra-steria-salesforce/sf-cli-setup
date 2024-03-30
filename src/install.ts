@@ -11,6 +11,7 @@ import { Action } from './types'
 export class SalesforceCLI {
   SF_CLI_VERSION: string
   NPM_MODE: boolean
+  SF_DIR: string = '/home/runner/sf'
 
   constructor() {
     const { SF_CLI_VERSION, NPM_MODE } = getInputs()
@@ -29,49 +30,12 @@ export class SalesforceCLI {
     }
   }
 
-  private getHomeDir(): string {
-    let homedir = ''
-
-    if (process.platform === 'win32') {
-      homedir = process.env['USERPROFILE'] || 'C:\\'
-    } else {
-      homedir = `${process.env.HOME}`
-    }
-
-    core.debug(`homeDir: ${homedir}`)
-
-    return homedir
-  }
-
-  private async createWorkDir(): Promise<string> {
-    const workDir = path.join(this.getHomeDir(), Action.WorkDirName)
-    await io.mkdirP(workDir)
-    core.debug(`workDir: ${workDir}`)
-    return workDir
-  }
-
-  private async createTempDir(workDir: string): Promise<string> {
-    const tempDir = path.join(workDir, Action.TempDirName)
-    await io.mkdirP(tempDir)
-    core.debug(`tempDir: ${tempDir}`)
-    return tempDir
-  }
-
-  private async createBinDir(workDir: string): Promise<string> {
-    const binDir = path.join(workDir, 'bin')
-    await io.mkdirP(binDir)
-    core.debug(`binDir: ${binDir}`)
-    return binDir
-  }
-
   private async download(): Promise<void> {
-    const workDir = await this.createWorkDir()
-    // const tempDir = await this.createTempDir(workDir)
-    // const binDir = await this.createBinDir(workDir)
+    await io.mkdirP(this.SF_DIR)
 
     const cliPath = await tc.downloadTool(
       'https://registry.npmjs.org/@salesforce/cli/-/cli-2.34.7.tgz',
-      `${workDir}/cli.tgz`
+      `${this.SF_DIR}/cli.tgz`
     )
     // const cliExtractedFolder = await tc.extractTar(cliPath, tempDir)
     // await execute(`ls -a ${cliExtractedFolder}/package`)
@@ -82,16 +46,9 @@ export class SalesforceCLI {
     }
 
     core.info(cliPath)
-    await execute(`npm install ${workDir}/cli.tgz --omit dev --ignore-scripts`)
-    await execute(`ls ${workDir}`)
-    await execute(`ls`)
-    await execute(`pwd`)
-    // await execute(`ln -s ${cliExtractedFolder}/package/bin/run.js ${binDir}/sf`)
-    // core.addPath(`${cliExtractedFolder}/package/bin`)
-    core.addPath(`${workDir}/node_modules/.bin`)
-    // await execute(`chmod +x ${binDir}/sf`)
-
-    // await io.mv(toolBin, binDir)
+    await execute(`npm install ${this.SF_DIR}/cli.tgz ${this.SF_DIR} --omit dev --ignore-scripts`)
+    await execute(`ls ${this.SF_DIR}`)
+    core.addPath(`${this.SF_DIR}/node_modules/.bin`)
   }
 
   private async installCli(): Promise<void> {
