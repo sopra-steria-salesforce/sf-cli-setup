@@ -10,6 +10,14 @@ inputs:
   sf-cli-version:
     description: sf cli version number. Specify a version number (x.x.x) or empty for the latest version
     required: false
+  save-cache:
+    description: Cache the Salesforce CLI for faster installation in other jobs (recommended to save in main brach)
+    required: false
+    default: 'false'
+  restore-cache:
+    description: Use cache of the Salesforce CLI (if existing) for faster installation
+    required: false
+    default: 'false'
   auth-url:
     description: The auth-url to be used in the auth-url authentication flow
     required: false
