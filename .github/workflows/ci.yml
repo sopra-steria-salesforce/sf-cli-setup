@@ -59,7 +59,7 @@ jobs:
       actions: write
     steps:
       - uses: actions/checkout@v4
-      - run: gh api --method DELETE /repositories/${{ github.repository_id }}/actions/caches?key=salesforce/cli@v${{ env.SF_VERSION }}-Linux-x64
+      - run: gh api --method DELETE /repositories/${{ github.repository_id }}/actions/caches?key=salesforce/cli@v${{ env.SF_VERSION }}-Linux-x64 || true (the cache could be deleted be itself)
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
