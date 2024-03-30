@@ -28845,7 +28845,7 @@ class SalesforceCLI {
     async download() {
         const nodeDirectory = tc.find('sf-cli', '2.34.7');
         if (nodeDirectory) {
-            core.addPath(`${nodeDirectory}/node_modules/.bin`);
+            return core.addPath(`${nodeDirectory}/node_modules/.bin`);
         }
         await io.mkdirP(this.SF_DIR);
         const cliPath = await tc.downloadTool('https://registry.npmjs.org/@salesforce/cli/-/cli-2.34.7.tgz', `${this.SF_DIR}/cli.tgz`);
