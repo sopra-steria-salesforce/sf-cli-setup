@@ -39,10 +39,6 @@ inputs:
     description: Set the default org
     required: false
     default: 'false'
-  npm-mode:
-    description: Install Salesforce CLI using package.json and npm (allows caching of node_modules)
-    required: false
-    default: 'false'
 
 runs:
   using: node20

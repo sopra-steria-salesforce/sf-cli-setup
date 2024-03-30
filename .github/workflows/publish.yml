@@ -3,8 +3,8 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - master
       - main
+      - master
 
 jobs:
   publish:
@@ -14,3 +14,6 @@ jobs:
       - uses: tgymnich/publish-github-action@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+      - run: echo "VERSION=npm version minor --no-git-tag-version" >> $GITHUB_ENV
+      - uses: fregante/setup-git-user@v2
+      - run: git push origin HEAD:${{ github.ref_name }}

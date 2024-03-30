@@ -2,11 +2,9 @@ import * as exec from '@actions/exec'
 import * as core from '@actions/core'
 
 export async function execute(cmd: string, params: string[] = []): Promise<void> {
-  let exitCode = 0
   let message = ''
-  await exec.exec(cmd, params).then(res => {
-    exitCode = res
-  })
+  const exitCode = await exec.exec(cmd, params)
+
   const options: exec.ExecOptions = {}
   options.listeners = {
     stdout: (data: Buffer) => {

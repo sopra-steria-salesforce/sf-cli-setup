@@ -1,70 +1,60 @@
-import * as core from '@actions/core'
-import * as exec from '@actions/exec'
-import { execute } from './helper'
+// Load tempDirectory before it gets wiped by tool-cache
+let tempDirectory = process.env['RUNNER_TEMP'] || ''
 
-export async function installCli(): Promise<void> {
-  try {
-    await install()
-  } catch (error) {
-    if (error instanceof Error) {
-      core.setFailed(error.message)
+if (!tempDirectory) {
+  let baseLocation
+  if (process.platform === 'win32') {
+    // On windows use the USERPROFILE env variable
+    baseLocation = process.env['USERPROFILE'] || 'C:\\'
+  } else {
+    if (process.platform === 'darwin') {
+      baseLocation = '/Users'
+    } else {
+      baseLocation = '/home'
     }
   }
+  tempDirectory = path.join(baseLocation, 'actions', 'temp')
 }
 
-async function install(): Promise<void> {
-  if (isNpmMode()) {
-    core.info('Salesforce CLI is installed locally using npm, skipping installation.')
-    return await addToPath()
+/* eslint-disable import/first */
+import * as path from 'path'
+import * as core from '@actions/core'
+import * as tc from '@actions/tool-cache'
+import * as io from '@actions/io'
+import { execute } from './helper'
+import { getInputs } from './action-inputs'
+/* eslint-enable import/first */
+
+export class SalesforceCLI {
+  SF_CLI_VERSION: string
+
+  constructor() {
+    this.SF_CLI_VERSION = getInputs().SF_CLI_VERSION
   }
 
-  if (await isAlreadyInstalled()) {
-    return core.info('Salesforce CLI is already installed globally, skipping installation.')
+  async install(): Promise<void> {
+    try {
+      if (this.SF_CLI_VERSION) {
+        await this.installCli()
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        core.setFailed(error.message)
+      }
+    }
   }
 
-  const version = core.getInput('sf-cli-version')
-  await installGlobally(version || 'latest')
-}
+  private async installCli(): Promise<void> {
+    const tmp = path.join(tempDirectory, 'sf')
+    await io.mkdirP(tmp)
 
-async function installGlobally(version: string): Promise<void> {
-  await execute(`npm install --global @salesforce/cli@${version}`)
-  core.info(`Installed Salesforce CLI globally with version '${version}'`)
-}
+    let toolPath: string = tc.find('sf-cli', this.SF_CLI_VERSION)
 
-async function addToPath(): Promise<void> {
-  if (await isAlreadyAddedToPath()) {
-    return core.info('Salesforce CLI is already added to path, skipping.')
-  }
+    if (!toolPath) {
+      await execute(`npm --global --prefix ${tmp} install @salesforce/cli@${this.SF_CLI_VERSION}`)
+      toolPath = await tc.cacheDir(tmp, 'sf-cli', this.SF_CLI_VERSION)
+    }
 
-  await execute('mkdir -p ./node_modules/.bin/sf-cli')
-  await execute('ln -s ./node_modules/.bin/sf ./node_modules/.bin/sf-cli/sf')
-  core.addPath('./node_modules/.bin/sf-cli')
-
-  core.info('Added local npm installation of Salesforce CLI to path, `sf` is ready for use.')
-}
-
-/* -------------------------------------------------------------------------- */
-/*                                   helpers                                  */
-/* -------------------------------------------------------------------------- */
-
-function isNpmMode(): Boolean {
-  return core.getInput('npm-mode') == 'true'
-}
-
-async function isAlreadyInstalled(): Promise<boolean> {
-  try {
-    await exec.exec('npm ls --global @salesforce/cli')
-    return true
-  } catch (error) {
-    return false
-  }
-}
-
-async function isAlreadyAddedToPath(): Promise<boolean> {
-  try {
-    await exec.exec('sf')
-    return true
-  } catch (error) {
-    return false
+    core.addPath(`${toolPath}/bin`)
   }
 }

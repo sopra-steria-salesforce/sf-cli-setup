@@ -1,64 +1,74 @@
 import * as core from '@actions/core'
 import { execute } from './helper'
 import fs from 'fs'
+import { getInputs } from './action-inputs'
+import { IActionInputs } from './types'
 
-const instanceUrl = core.getInput('instance-url') ? '--instance-url ' + core.getInput('instance-url') : ''
-const defaultOrg = core.getInput('set-default-org') ? '--set-default' : ''
-const defaultDevhub = core.getInput('set-default-dev-hub') ? '--set-default-dev-hub' : ''
-const alias = core.getInput('alias') ? '--salias ' + core.getInput('alias') : ''
+export class SalesforceAuth {
+  in: IActionInputs
 
-export async function authOrg(): Promise<void> {
-  try {
-    authenticate()
-  } catch (error) {
-    if (error instanceof Error) {
-      core.setFailed(error.message)
+  constructor() {
+    this.in = getInputs()
+  }
+
+  async auth(): Promise<void> {
+    try {
+      this.authenticate()
+    } catch (error) {
+      if (error instanceof Error) {
+        core.setFailed(error.message)
+      }
     }
   }
-}
 
-function authenticate(): void {
-  if (core.getInput('auth-url')) {
-    authenticateAuthUrl()
-  } else if (core.getInput('username') && core.getInput('client-id') && core.getInput('private-key')) {
-    authenticateJwt()
-  } else if (core.getInput('access-token') && core.getInput('instance-url')) {
-    authenticateAccessToken()
+  private authenticate(): void {
+    if (this.in.AUTH_URL) {
+      this.authenticateAuthUrl()
+    } else if (this.in.USERNAME && this.in.CLIENT_ID && this.in.PRIVATE_KEY) {
+      this.authenticateJwt()
+    } else if (this.in.ACCESS_TOKEN && this.in.INSTANCE_URL) {
+      this.authenticateAccessToken()
+    }
   }
-}
 
-async function authenticateAuthUrl(): Promise<void> {
-  fs.writeFileSync('/tmp/sfdx_auth.txt', core.getInput('auth-url'))
-  await execute(`sf org login sfdx-url --sfdx-url-file /tmp/sfdx_auth.txt ${defaultDevhub} ${defaultOrg} ${alias}`)
-  await execute('rm -rf /tmp/sfdx_auth.txt')
-}
+  private async authenticateAuthUrl(): Promise<void> {
+    fs.writeFileSync('/tmp/sfdx_auth.txt', this.in.AUTH_URL)
+    await this.auth2('sf org login sfdx-url', ['--sfdx-url-file /tmp/sfdx_auth.txt'])
+    await execute('rm -rf /tmp/sfdx_auth.txt')
+  }
 
-async function authenticateJwt(): Promise<void> {
-  const user = core.getInput('username')
-  const client_id = core.getInput('client-id')
-  // need to write the key to a file, because when creating scratch orgs the private key is needed again.
-  // stored in /tmp at root, which is not tracked by git. Repo is stored at /home/runner/work/my-repo-name/my-repo-name.
-  fs.writeFileSync('/tmp/server.key', core.getInput('private-key'))
+  private async authenticateJwt(): Promise<void> {
+    // need to write the key to a file, because when creating scratch orgs the private key is needed again.
+    // stored in /tmp at root, which is not tracked by git. Repo is stored at /home/runner/work/my-repo-name/my-repo-name.
+    fs.writeFileSync('/tmp/server.key', this.in.PRIVATE_KEY)
 
-  await execute(
-    [
-      'sf org login jwt',
-      '--username ' + user,
-      '--client-id ' + client_id,
-      '--jwt-key-file /tmp/server.key',
-      instanceUrl,
-      defaultDevhub,
-      defaultOrg,
-      alias
-    ].join(' ')
-  )
-}
+    await this.auth2('sf org login jwt', [
+      `--username ${this.in.USERNAME}`,
+      `--client-id ${this.in.CLIENT_ID}`,
+      '--jwt-key-file /tmp/server.key'
+    ])
+  }
 
-async function authenticateAccessToken(): Promise<void> {
-  const token = core.getInput('access-token')
-  const url = core.getInput('instance-url')
+  private async authenticateAccessToken(): Promise<void> {
+    await this.auth2(`echo ${this.in.ACCESS_TOKEN} | sf org login access-token`, ['--no-prompt'])
+  }
 
-  await execute(
-    `echo ${token} | sf org login access-token ${defaultDevhub} ${defaultOrg} ${alias} --no-prompt --instance-url ${url}`
-  )
+  private async auth2(type: string, parameters: string[]): Promise<void> {
+    await execute(
+      `${type} ${parameters.join(' ')} ${this.alias} ${this.defaultDevhub} ${this.defaultOrg} ${this.instanceUrl}`
+    )
+  }
+
+  get alias(): string {
+    return this.in.ALIAS ? `--alias ${this.in.ALIAS}` : ''
+  }
+  get defaultDevhub(): string {
+    return this.in.SET_DEFAULT_DEV_HUB ? '--set-default-dev-hub' : ''
+  }
+  get defaultOrg(): string {
+    return this.in.SET_DEFAULT_ORG ? '--set-default' : ''
+  }
+  get instanceUrl(): string {
+    return this.in.INSTANCE_URL ? `--instance-url ${this.in.INSTANCE_URL}` : ''
+  }
 }
