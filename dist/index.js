@@ -28843,17 +28843,14 @@ const helper_1 = __nccwpck_require__(2707);
 const action_inputs_1 = __nccwpck_require__(9437);
 class SalesforceCLI {
     SF_CLI_VERSION;
-    NPM_MODE;
-    SF_DIR = '/home/runner/sf';
     constructor() {
-        const { SF_CLI_VERSION, NPM_MODE } = (0, action_inputs_1.getInputs)();
-        this.SF_CLI_VERSION = SF_CLI_VERSION;
-        this.NPM_MODE = NPM_MODE;
+        this.SF_CLI_VERSION = (0, action_inputs_1.getInputs)().SF_CLI_VERSION;
     }
     async install() {
         try {
-            await this.download();
-            // await this.installCli()
+            if (this.SF_CLI_VERSION) {
+                await this.installCli();
+            }
         }
         catch (error) {
             if (error instanceof Error) {
@@ -28861,7 +28858,7 @@ class SalesforceCLI {
             }
         }
     }
-    async download() {
+    async installCli() {
         const p = path.join(tempDirectory, 'sf');
         await io.mkdirP(p);
         let toolPath;
@@ -28877,26 +28874,6 @@ class SalesforceCLI {
     }
 }
 exports.SalesforceCLI = SalesforceCLI;
-
-
-/***/ }),
-
-/***/ 399:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.run = void 0;
-const install_1 = __nccwpck_require__(1649);
-const auth_1 = __nccwpck_require__(3497);
-async function run() {
-    const cli = new install_1.SalesforceCLI();
-    await cli.install();
-    const sf = new auth_1.SalesforceAuth();
-    await sf.auth();
-}
-exports.run = run;
 
 
 /***/ }),
@@ -30805,12 +30782,17 @@ var __webpack_exports__ = {};
 var exports = __webpack_exports__;
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-/**
- * The entrypoint for the action.
- */
-const main_1 = __nccwpck_require__(399);
-// eslint-disable-next-line @typescript-eslint/no-floating-promises
-(0, main_1.run)();
+exports.run = void 0;
+const install_1 = __nccwpck_require__(1649);
+const auth_1 = __nccwpck_require__(3497);
+async function run() {
+    const cli = new install_1.SalesforceCLI();
+    await cli.install();
+    const sf = new auth_1.SalesforceAuth();
+    await sf.auth();
+}
+exports.run = run;
+run();
 
 })();
 
