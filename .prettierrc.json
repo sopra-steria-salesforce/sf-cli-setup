@@ -1,6 +1,6 @@
 {
   "printWidth": 120,
-  "tabWidth": 2,
+  "tabWidth": 4,
   "useTabs": false,
   "semi": false,
   "singleQuote": true,
@@ -18,6 +18,12 @@
       "files": "*.md",
       "options": {
         "printWidth": 2000
+      }
+    },
+    {
+      "files": "*.yml",
+      "options": {
+        "tabWidth": 2
       }
     }
   ]
