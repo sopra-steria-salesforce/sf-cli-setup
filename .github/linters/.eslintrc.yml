@@ -33,6 +33,8 @@ extends:
 
 rules:
   {
+    'no-shadow': 'off',
+    '@typescript-eslint/no-shadow': 'error',
     'camelcase': 'off',
     'eslint-comments/no-use': 'off',
     'eslint-comments/no-unused-disable': 'off',
@@ -46,10 +48,8 @@ rules:
     '@typescript-eslint/await-thenable': 'error',
     '@typescript-eslint/ban-ts-comment': 'error',
     '@typescript-eslint/consistent-type-assertions': 'error',
-    '@typescript-eslint/explicit-member-accessibility':
-      ['error', { 'accessibility': 'no-public' }],
-    '@typescript-eslint/explicit-function-return-type':
-      ['error', { 'allowExpressions': true }],
+    '@typescript-eslint/explicit-member-accessibility': ['error', { 'accessibility': 'no-public' }],
+    '@typescript-eslint/explicit-function-return-type': ['error', { 'allowExpressions': true }],
     '@typescript-eslint/func-call-spacing': ['error', 'never'],
     '@typescript-eslint/no-array-constructor': 'error',
     '@typescript-eslint/no-empty-interface': 'error',
