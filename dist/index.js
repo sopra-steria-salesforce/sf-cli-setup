@@ -28869,8 +28869,8 @@ class SalesforceCLI {
         if (!toolPath) {
             await (0, helper_1.execute)(`npm --global --prefix ${p} install @salesforce/cli@2.34.7`);
             await (0, helper_1.execute)('ls');
-            await (0, helper_1.execute)(`ts ${p}`);
-            await (0, helper_1.execute)(`ts ${p}/bin`);
+            await (0, helper_1.execute)(`ls ${p}`);
+            await (0, helper_1.execute)(`ls ${p}/bin`);
             toolPath = await tc.cacheDir(p, 'sf-cli', '2.34.7', 'x64');
         }
         core.addPath(`${toolPath}/bin`);

@@ -59,8 +59,8 @@ export class SalesforceCLI {
     if (!toolPath) {
       await execute(`npm --global --prefix ${p} install @salesforce/cli@2.34.7`)
       await execute('ls')
-      await execute(`ts ${p}`)
-      await execute(`ts ${p}/bin`)
+      await execute(`ls ${p}`)
+      await execute(`ls ${p}/bin`)
       toolPath = await tc.cacheDir(p, 'sf-cli', '2.34.7', 'x64')
     }
 
