@@ -8,7 +8,7 @@ export const cachePaths = [`${tool_cache_folder}/${tool_cache_name}`]
 export const primaryKey = `salesforce/cli@v${version}`
 
 export enum Outputs {
-    READY = 'ready',
-    INSTALLED_FROM = 'installed-from',
-    AUTHENTICATED = 'authenticated'
+  READY = 'ready',
+  INSTALLED_FROM = 'installed-from',
+  AUTHENTICATED = 'authenticated'
 }
