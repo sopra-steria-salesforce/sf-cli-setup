@@ -1,6 +1,6 @@
 import * as cache from '@actions/cache'
 import * as core from '@actions/core'
-import { cachePaths, primaryKey } from './constants'
+import { cachePaths, primaryKey } from './constants.js'
 
 export const restoreCache = async (): Promise<void> => {
   core.info(`Checking cache with primary key '${primaryKey}`)

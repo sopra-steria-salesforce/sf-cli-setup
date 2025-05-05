@@ -1,4 +1,4 @@
-import { getInputs } from '../shared/inputs'
+import { getInputs } from '../shared/inputs.js'
 
 const version = getInputs().SF_CLI_VERSION
 const tool_cache_folder = '/opt/hostedtoolcache'

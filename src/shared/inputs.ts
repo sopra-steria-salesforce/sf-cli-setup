@@ -1,5 +1,5 @@
 import * as core from '@actions/core'
-import { IActionInputs } from './types'
+import { IActionInputs } from './types.js'
 
 export const getInputs = (): IActionInputs => {
   const SF_CLI_VERSION: string = core.getInput('sf-cli-version', {
