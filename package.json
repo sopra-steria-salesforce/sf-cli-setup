@@ -1,20 +1,19 @@
 {
-  "name": "typescript-action",
-  "description": "GitHub Actions TypeScript template",
-  "version": "0.0.0",
-  "author": "",
+  "name": "sf-cli-setup",
+  "description": "Setup sf cli in GitHub Actions",
+  "version": "0.8.1",
   "type": "module",
-  "private": true,
-  "homepage": "https://github.com/actions/typescript-action",
+  "author": "sopra-steria-salesforce",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/actions/typescript-action.git"
-  },
-  "bugs": {
-    "url": "https://github.com/actions/typescript-action/issues"
+    "url": "git+https://github.com/sopra-steria-salesforce/sf-cli-setup.git"
   },
   "keywords": [
-    "actions"
+    "actions",
+    "node",
+    "setup",
+    "salesforce",
+    "sfdx"
   ],
   "exports": {
     ".": "./dist/index.js"
@@ -43,17 +42,17 @@
     "@actions/tool-cache": "^2.0.2"
   },
   "devDependencies": {
-    "@eslint/compat": "^1.2.8",
-    "@github/local-action": "^3.2.0",
-    "@types/node": "^20.17.31",
-    "@typescript-eslint/eslint-plugin": "^8.31.0",
-    "@typescript-eslint/parser": "^8.31.0",
-    "eslint": "^9.25.1",
-    "@vercel/ncc": "^0.38.1",
+    "@eslint/compat": "^1.2.9",
+    "@github/local-action": "^3.2.1",
+    "@types/node": "^20.17.32",
+    "@typescript-eslint/eslint-plugin": "^8.31.1",
+    "@typescript-eslint/parser": "^8.31.1",
+    "eslint": "^9.26.0",
+    "@vercel/ncc": "^0.38.3",
     "eslint-config-prettier": "^10.1.2",
     "eslint-import-resolver-typescript": "^4.3.4",
     "eslint-plugin-import": "^2.31.0",
-    "eslint-plugin-prettier": "^5.2.6",
+    "eslint-plugin-prettier": "^5.4.0",
     "make-coverage-badge": "^1.2.0",
     "prettier": "^3.5.3",
     "prettier-eslint": "^16.4.1",
