@@ -26,5 +26,5 @@ jobs:
       - run: git add package.json package-lock.json
       - run: echo "VERSION=$(npm pkg get version | tr -d '\"')" >> $GITHUB_ENV
       - run: git commit -m 'Bump version to ${{ env.VERSION }}'
-      - run: echo '::info::Incrementing version to ${{ env.VERSION }}'
+      - run: echo '::notice::Incrementing version to ${{ env.VERSION }}'
       - run: git push origin HEAD:${{ github.ref_name }}
