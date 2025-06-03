@@ -24,7 +24,7 @@ jobs:
       - uses: fregante/setup-git-user@v2
       - run: npm version patch --no-git-tag-version
       - run: git add package.json package-lock.json
-      - run: git commit -m 'Bump version to $(npm pkg get version)'
-      - run: |
-          echo "::debug::Incrementing version to $(npm pkg get version)"
+      - run: echo "VERSION=$(npm pkg get version | tr -d '\"')" >> $GITHUB_ENV
+      - run: git commit -m 'Bump version to ${{ env.VERSION }}'
+      - run: echo '::debug::Incrementing version to ${{ env.VERSION }}'
       - run: git push origin HEAD:${{ github.ref_name }}
