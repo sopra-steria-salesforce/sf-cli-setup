@@ -21,8 +21,10 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
+      - uses: fregante/setup-git-user@v2
       - run: npm version patch --no-git-tag-version
+      - run: git add package.json package-lock.json
+      - run: git commit -m 'Bump version to $(npm pkg get version)'
       - run: |
           echo "::debug::Incrementing version to $(npm pkg get version)"
-      - uses: fregante/setup-git-user@v2
       - run: git push origin HEAD:${{ github.ref_name }}
