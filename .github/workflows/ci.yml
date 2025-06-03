@@ -45,6 +45,7 @@ jobs:
         uses: ./
         with:
           sf-cli-version: ${{ env.VERSION }}
+          use-cache: false
       - run: |
           echo "version=$(npm view @salesforce/cli version)" >> $GITHUB_OUTPUT
         id: check
