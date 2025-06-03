@@ -21,7 +21,7 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
-      - run: npm version minor --no-git-tag-version
+      - run: npm version patch --no-git-tag-version
       - run: |
           echo "::debug::Incrementing version to $(npm pkg get version)"
       - uses: fregante/setup-git-user@v2
