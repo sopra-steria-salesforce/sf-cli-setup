@@ -30,7 +30,7 @@
     "lint": "npx eslint .",
     "local-action": "npx @github/local-action . src/main.ts .env",
     "local-action:post": "npx @github/local-action . src/cache/save.ts .env",
-    "package": "ncc build src/main.ts --license licenses.txt --minify && ncc build src/cache/save.ts --out dist/cache-save --minify",
+    "package": "ncc build src/index.ts --license licenses.txt --minify && ncc build src/cache/save.ts --out dist/cache-save --minify",
     "all": "npm run format:write && npm run lint && npm run coverage && npm run package"
   },
   "license": "MIT",
