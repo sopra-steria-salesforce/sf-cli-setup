@@ -6,6 +6,8 @@ on:
   push:
     branches:
       - main
+env:
+  VERSION: 2.34.7
 permissions:
   contents: read
 jobs:
@@ -42,7 +44,17 @@ jobs:
         id: test-action
         uses: ./
         with:
-          sf-cli-version: 2.34.7
+          sf-cli-version: ${{ env.VERSION }}
       - name: Print Output
         id: output
         run: echo "${{ steps.test-action.outputs.time }}"
+      - run: |
+          echo "version=$(npm view @salesforce/cli version)" >> $GITHUB_OUTPUT
+        id: check
+      - run: echo ${{ steps.check.outputs.version }}
+      - name: Verify Version Number (Is Correct)
+        if: steps.check.outputs.version == env.VERSION
+        run: exit 0
+      - name: Verify Version Number (Is Not Correct)
+        if: steps.check.outputs.version != env.VERSION
+        run: exit 1
