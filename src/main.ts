@@ -8,5 +8,3 @@ export async function run(): Promise<void> {
   const sf = new SalesforceAuth()
   await sf.auth()
 }
-
-run()
