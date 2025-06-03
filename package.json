@@ -22,7 +22,7 @@
     "node": ">=20"
   },
   "scripts": {
-    "preinstall": "cp scripts/pre-commit .git/hooks/ && chmod +x .git/hooks/pre-commit && echo 'hook copied'",
+    "preinstall": "cp scripts/pre-commit .git/hooks/ && chmod +x .git/hooks/pre-commit && echo 'hook copied' && cp .env.example .env",
     "bundle": "npm run format:write && npm run package",
     "coverage": "npx make-coverage-badge --output-path ./badges/coverage.svg",
     "format:write": "npx prettier --write .",
