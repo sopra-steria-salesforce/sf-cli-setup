@@ -45,9 +45,6 @@ jobs:
         uses: ./
         with:
           sf-cli-version: ${{ env.VERSION }}
-      - name: Print Output
-        id: output
-        run: echo "${{ steps.test-action.outputs.time }}"
       - run: |
           echo "version=$(npm view @salesforce/cli version)" >> $GITHUB_OUTPUT
         id: check
