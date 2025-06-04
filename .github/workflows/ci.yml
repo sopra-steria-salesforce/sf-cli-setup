@@ -49,8 +49,7 @@ jobs:
       - name: Check Version Number
         id: check
         run: |
-          echo "version=$(npm view @salesforce/cli version)" >> $GITHUB_OUTPUT
-      - run: echo "Version ${{ steps.check.outputs.version }} was installed"
+          echo "version=$(sf -v | awk -F'/' '{print $3}' | awk '{print $1}')" >> $GITHUB_OUTPUT
       - name: Verify Version Number
         run: |
           if [ "${{ steps.check.outputs.version }}" = "${{ env.VERSION }}" ]; then
