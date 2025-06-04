@@ -179,7 +179,7 @@ jobs:
     steps:
       - uses: sopra-steria-salesforce/sf-cli-setup@v1
         with:
-        sf-cli-version: 2.27.6
-        use-cache: false
+          sf-cli-version: 2.27.6
+          use-cache: false
       - run: sf --version
 ```
