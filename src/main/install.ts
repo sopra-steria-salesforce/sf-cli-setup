@@ -77,7 +77,7 @@ export class SalesforceCLI {
   }
 
   private async addToPath(cliPath: string): Promise<void> {
-    core.info('Adding sf cli to path...')
+    core.info('Adding SF CLI to path...')
     core.addPath(`${cliPath}/bin`)
     core.info('✅ Success! sf commands now available in your workflow.')
   }
