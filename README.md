@@ -96,7 +96,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: sopra-steria-salesforce/sf-cli-setup@v0.8
+      - uses: sopra-steria-salesforce/sf-cli-setup@v1
         with:
           sf-cli-version: latest
           username: ${{ secrets.USERNAME }}
@@ -122,7 +122,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       # this run using the plugin will be around 5 seconds, compared to the previous job of 40 seconds, due to built-in caching
-      - uses: sopra-steria-salesforce/sf-cli-setup@v0.8
+      - uses: sopra-steria-salesforce/sf-cli-setup@v1
         with:
           sf-cli-version: latest
           username: ${{ needs.create.outputs.username }}
@@ -138,7 +138,7 @@ jobs:
     needs: [create, deploy]
     steps:
       - uses: actions/checkout@v4
-      - uses: sopra-steria-salesforce/sf-cli-setup@v0.8
+      - uses: sopra-steria-salesforce/sf-cli-setup@v1
         with:
           sf-cli-version: latest
           username: ${{ needs.create.outputs.username }}
@@ -160,7 +160,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: sopra-steria-salesforce/sf-cli-setup@v0.8
+      - uses: sopra-steria-salesforce/sf-cli-setup@v1
         with:
           sf-cli-version: 2.27.6
           auth-url: ${{ secrets.YOUR_SECRET }}
@@ -177,7 +177,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: sopra-steria-salesforce/sf-cli-setup@v0.8
+      - uses: sopra-steria-salesforce/sf-cli-setup@v1
         with:
         sf-cli-version: 2.27.6
         use-cache: false
