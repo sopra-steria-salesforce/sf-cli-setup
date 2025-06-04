@@ -3,15 +3,14 @@
 [![Check dist/](https://github.com/sopra-steria-salesforce/sf-cli-setup/actions/workflows/check-dist.yml/badge.svg)](https://github.com/sopra-steria-salesforce/sf-cli-setup/actions/workflows/check-dist.yml)
 [![CodeQL](https://github.com/sopra-steria-salesforce/sf-cli-setup/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/sopra-steria-salesforce/sf-cli-setup/actions/workflows/codeql-analysis.yml)
 
-This action allows to use the Salesforce cli from GitHub Actions, and easily
-authenticate an org.
+This action allows to use the Salesforce cli from GitHub Actions, and easily authenticate an org.
 
 # Inputs
 
 ## Required or Optional
 
-Every input (except `sf-cli-version`) is optional. If no authentication details
-are added, only the cli is installed without any authentication.
+Every input (except `sf-cli-version`) is optional. If no authentication details are added, only the cli is installed
+without any authentication.
 
 ## General
 
@@ -27,15 +26,12 @@ are added, only the cli is installed without any authentication.
 
 See
 [jwt documentation](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_auth_jwt_flow.htm).
-Allows authenticating the DevHub org using `username` of a dedicated integration
-user, and `client-id` and `private-key` of a connected app. You'll also need the
-`client-secret` to create a scratch org using the jwt flow, but it's not needed
-in the plugin. The benefit of authenticating the DevHub using jwt is that you
-can re-authenticate any active scratch org without knowing any information about
-it (except the username and instance url). Also useful because the information
-needed to re-authenticate a created scratch org is not secret information.
-Actual secrets (like an access token) cannot easily be transferred from job to
-job in Github Actions. See example below.
+Allows authenticating the DevHub org using `username` of a dedicated integration user, and `client-id` and `private-key`
+of a connected app. You'll also need the `client-secret` to create a scratch org using the jwt flow, but it's not needed
+in the plugin. The benefit of authenticating the DevHub using jwt is that you can re-authenticate any active scratch org
+without knowing any information about it (except the username and instance url). Also useful because the information
+needed to re-authenticate a created scratch org is not secret information. Actual secrets (like an access token) cannot
+easily be transferred from job to job in Github Actions. See example below.
 
 | Variable       | Example                                            | Description                                                                                                |
 | -------------- | -------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
@@ -48,8 +44,7 @@ job in Github Actions. See example below.
 
 See
 [access-token documentation](https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_org_commands_unified.htm#cli_reference_org_login_access-token_unified).
-Practical for authenticating orgs when you can always get the access-token.
-However, it'll only last a few hours.
+Practical for authenticating orgs when you can always get the access-token. However, it'll only last a few hours.
 
 | Variable       | Example                           | Description                                                                          |
 | -------------- | --------------------------------- | ------------------------------------------------------------------------------------ |
@@ -60,11 +55,9 @@ However, it'll only last a few hours.
 
 See
 [sfdx-url documentation](https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_org_commands_unified.htm#cli_reference_org_login_sfdx-url_unified).
-The easiest way to get a DevHub started and to create scratch orgs. However, to
-get going, you need to login once with a password for a dedicated user using a
-web flow to get a token in the sfdx-url flow. If working in a team, this could
-be annoying to maintain. And logging in again using the web flow will reset the
-sfdx-url token.
+The easiest way to get a DevHub started and to create scratch orgs. However, to get going, you need to login once with a
+password for a dedicated user using a web flow to get a token in the sfdx-url flow. If working in a team, this could be
+annoying to maintain. And logging in again using the web flow will reset the sfdx-url token.
 
 | Variable   | Example                                                  | Description                                                                            |
 | ---------- | -------------------------------------------------------- | -------------------------------------------------------------------------------------- |
@@ -72,23 +65,20 @@ sfdx-url token.
 
 # Cache
 
-To improve loading time of the plugin, caching of the installed sf cli is added
-to plugin. This is useful when doing a PR validation with many separate jobs for
-each task, and when the sf cli is needed for all jobs. It also caches across
+To improve loading time of the plugin, caching of the installed sf cli is added to plugin. This is useful when doing a
+PR validation with many separate jobs for each task, and when the sf cli is needed for all jobs. It also caches across
 different workflows, as longs as the version number is same for alle usages.
 
-This plugin uses about 33 MB of cache storage (from 10 GB allocated by GitHub).
-It will use 33 MB for each sf cli version number used. So if all jobs using this
-plugin uses the same version, storage should not be an issue. Each branch have
-separate cache, but if this script is run on the main branch, every branch will
-have access to the cache and won't re-cache it.
+This plugin uses about 33 MB of cache storage (from 10 GB allocated by GitHub). It will use 33 MB for each sf cli
+version number used. So if all jobs using this plugin uses the same version, storage should not be an issue. Each branch
+have separate cache, but if this script is run on the main branch, every branch will have access to the cache and won't
+re-cache it.
 
-Time savings will be from around 30-40 seconds to 4 seconds. If using the plugin
-many times in different jobs but in the same workflow, the total time savings
-will be notable and worth the storage.
+Time savings will be from around 30-40 seconds to 4 seconds. If using the plugin many times in different jobs but in the
+same workflow, the total time savings will be notable and worth the storage.
 
-Should you run out of storage, GitHub will automatically delete the oldest
-caches (across all cache types, not just sf cli).
+Should you run out of storage, GitHub will automatically delete the oldest caches (across all cache types, not just sf
+cli).
 
 # Example usage
 
@@ -175,9 +165,7 @@ jobs:
           sf-cli-version: 2.27.6
           auth-url: ${{ secrets.YOUR_SECRET }}
           set-default-dev-hub: true
-      - run:
-          sf org:create:scratch --definition-file
-          config/project-scratch-dev.json --wait 20 --alias scratch-org
+      - run: sf org:create:scratch --definition-file config/project-scratch-dev.json --wait 20 --alias scratch-org
 ```
 
 ## no auth

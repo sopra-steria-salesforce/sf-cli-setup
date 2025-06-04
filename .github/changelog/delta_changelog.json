@@ -2,15 +2,7 @@
   "categories": [
     {
       "title": "## 😎 What's New",
-      "labels": [
-        "feature",
-        "enhancement",
-        "fix",
-        "bug",
-        "test",
-        "documentation",
-        "refactor"
-      ]
+      "labels": ["feature", "enhancement", "fix", "bug", "test", "documentation", "refactor"]
     }
   ],
   "template": "#{{CHANGELOG}}",

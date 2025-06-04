@@ -1,10 +1,7 @@
 import * as exec from '@actions/exec'
 import * as core from '@actions/core'
 
-export async function execute(
-  cmd: string,
-  params: string[] = []
-): Promise<void> {
+export async function execute(cmd: string, params: string[] = []): Promise<void> {
   let message = ''
   const exitCode = await exec.exec(cmd, params)
 
