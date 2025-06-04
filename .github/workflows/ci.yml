@@ -7,7 +7,7 @@ on:
     branches:
       - main
 env:
-  VERSION: 2.34.7
+  VERSION: 2.91.6
 permissions:
   contents: read
 jobs:
@@ -46,13 +46,16 @@ jobs:
         with:
           sf-cli-version: ${{ env.VERSION }}
           use-cache: false
-      - run: |
-          echo "version=$(npm view @salesforce/cli version)" >> $GITHUB_OUTPUT
+      - name: Check Version Number
         id: check
-      - run: echo ${{ steps.check.outputs.version }}
-      - name: Verify Version Number (Is Correct)
-        if: steps.check.outputs.version == env.VERSION
-        run: exit 0
-      - name: Verify Version Number (Is Not Correct)
-        if: steps.check.outputs.version != env.VERSION
-        run: exit 1
+        run: |
+          echo "version=$(npm view @salesforce/cli version)" >> $GITHUB_OUTPUT
+      - run: echo "Version ${{ steps.check.outputs.version }} was installed"
+      - name: Verify Version Number
+        run: |
+          if [ "${{ steps.check.outputs.version }}" = "${{ env.VERSION }}" ]; then
+            exit 0
+          else
+            echo "::error::Version mismatch: expected ${{ env.VERSION }}, got ${{ steps.check.outputs.version }}"
+            exit 1
+          fi
