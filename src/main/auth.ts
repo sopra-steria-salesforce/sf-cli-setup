@@ -67,12 +67,15 @@ export class SalesforceAuth {
   get alias(): string {
     return this.inputs.ALIAS ? `--alias ${this.inputs.ALIAS}` : ''
   }
+
   get defaultDevhub(): string {
     return this.inputs.SET_DEFAULT_DEV_HUB ? '--set-default-dev-hub' : ''
   }
+
   get defaultOrg(): string {
     return this.inputs.SET_DEFAULT_ORG ? '--set-default' : ''
   }
+
   get instanceUrl(): string {
     return this.inputs.INSTANCE_URL ? `--instance-url ${this.inputs.INSTANCE_URL}` : ''
   }
