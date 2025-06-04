@@ -1,7 +1,7 @@
 {
   "name": "sf-cli-setup",
   "description": "Setup sf cli in GitHub Actions",
-  "version": "0.8.12",
+  "version": "0.8.13",
   "type": "module",
   "author": "sopra-steria-salesforce",
   "repository": {
