@@ -1,31 +1,11 @@
-// Load tempDirectory before it gets wiped by tool-cache
-let tempDirectory = process.env['RUNNER_TEMP'] || ''
-
-if (!tempDirectory) {
-  let baseLocation
-  if (process.platform === 'win32') {
-    // On windows use the USERPROFILE env variable
-    baseLocation = process.env['USERPROFILE'] || 'C:\\'
-  } else {
-    if (process.platform === 'darwin') {
-      baseLocation = '/Users'
-    } else {
-      baseLocation = '/home'
-    }
-  }
-  tempDirectory = path.join(baseLocation, 'actions', 'temp')
-}
-
-import * as path from 'path'
 import * as core from '@actions/core'
 import * as tc from '@actions/tool-cache'
-import * as io from '@actions/io'
 
 import { getInputs } from '../shared/inputs.js'
-import { restoreCache } from '../cache/restore.js'
+import { getCachedSfCli } from '../cache/restore.js'
 import { IActionInputs } from '../shared/types.js'
 import { Outputs } from '../cache/constants.js'
-import { execute } from './helper.js'
+import { execute, getTempDirectory } from './helper.js'
 
 export class SalesforceCLI {
   input: IActionInputs
@@ -46,62 +26,64 @@ export class SalesforceCLI {
   }
 
   private async start(): Promise<void> {
-    if (await this.alreadyInstalled()) {
+    if (await this.sfAlreadyInstalled()) {
       this.setOutput(true, 'already-installed')
-      return core.info('sf cli already installed and added to path, skipping')
+      core.info('sf cli already installed and added to path, skipping')
+      return
     }
 
-    // Check if sf cli was added to tool-cache (would be from this plugin being ran twice in the same job)
-    let toolPath: string = tc.find('sf-cli', this.input.SF_CLI_VERSION)
-    if (toolPath) {
-      core.info('The sf cli was found in the tool-cache, adding to path...')
-      this.setOutput(true, 'tool-cache')
-    }
-
-    // Restore the sf cli from GitHub cache (faster than npm install)
-    if (!toolPath && this.input.USE_CACHE) {
-      core.info(
-        `Checking for sf cli with version ${this.input.SF_CLI_VERSION} in GitHub cache...`
-      )
-      await restoreCache()
-      toolPath = tc.find('sf-cli', this.input.SF_CLI_VERSION)
-
-      if (toolPath) {
-        this.setOutput(true, 'cache')
-      }
-    }
-
-    // Install the sf cli via npm if tool-cache and cache restore failed/empty
-    if (!toolPath) {
-      core.info(
-        `Installing sf cli (version ${this.input.SF_CLI_VERSION}) from npm...`
-      )
-      const tmp = path.join(tempDirectory, 'sf')
-      await io.mkdirP(tmp)
-      await execute(
-        `npm --global --prefix ${tmp} install @salesforce/cli@${this.input.SF_CLI_VERSION}`
-      )
-      toolPath = await tc.cacheDir(tmp, 'sf-cli', this.input.SF_CLI_VERSION)
-      this.setOutput(true, 'npm')
-    }
-
-    // Make sf command available to path and in other steps
-    core.info('Adding sf cli to path...')
-    core.addPath(`${toolPath}/bin`)
-    core.info('✅ Success! sf commands no available in your workflow.')
+    const cliPath = await this.fetchSfCli()
+    await this.addToPath(cliPath)
   }
 
-  private setOutput(ready: boolean, source?: string): void {
-    core.setOutput(Outputs.READY, ready)
-    if (source) core.setOutput(Outputs.INSTALLED_FROM, source)
-  }
+  /* -------------------------------------------------------------------------- */
+  /*                               Helper Methods                               */
+  /* -------------------------------------------------------------------------- */
 
-  private async alreadyInstalled(): Promise<boolean> {
+  private async sfAlreadyInstalled(): Promise<boolean> {
     try {
       await execute('sf --version')
       return true
     } catch {
       return false
     }
+  }
+
+  private async fetchSfCli(): Promise<string> {
+    return this.input.USE_CACHE ? await this.restoreFromCache() : await this.installViaNpm()
+  }
+
+  private async restoreFromCache(): Promise<string> {
+    let cliPath = await getCachedSfCli()
+
+    if (cliPath) {
+      this.setOutput(true, 'cache')
+    } else {
+      cliPath = await this.installViaNpm()
+    }
+
+    return cliPath
+  }
+
+  private async installViaNpm(): Promise<string> {
+    core.info(`Installing sf cli (version ${this.input.SF_CLI_VERSION}) from npm...`)
+    const tmpDir = await getTempDirectory()
+
+    await execute(`npm --global --prefix ${tmpDir} install @salesforce/cli@${this.input.SF_CLI_VERSION}`)
+    const cliPath = await tc.cacheDir(tmpDir, 'sf-cli', this.input.SF_CLI_VERSION)
+    this.setOutput(true, 'npm')
+
+    return cliPath
+  }
+
+  private async addToPath(cliPath: string): Promise<void> {
+    core.info('Adding sf cli to path...')
+    core.addPath(`${cliPath}/bin`)
+    core.info('✅ Success! sf commands now available in your workflow.')
+  }
+
+  private setOutput(ready: boolean, source?: string): void {
+    core.setOutput(Outputs.READY, ready)
+    if (source) core.setOutput(Outputs.INSTALLED_FROM, source)
   }
 }
