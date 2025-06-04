@@ -6,17 +6,60 @@ on:
       - main
     paths:
       - 'dist/**'
+env:
+  VERSION_TEXT: Incrementing npm package version to
+  GET_CURRENT_TAG: npm pkg get version | tr -d '\"'
 jobs:
-  publish:
+  create-tags:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: tgymnich/publish-github-action@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+
+  create-release:
+    runs-on: ubuntu-latest
+    needs: create-tags
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          echo "CURRENT_TAG=$(${{ env.GET_CURRENT_TAG }})" >> $GITHUB_ENV
+      - run: |
+          echo "CURRENT_MINOR_TAG=$(${{ env.GET_CURRENT_TAG }} | sed -E 's/([0-9]+\.[0-9]+)\.[0-9]+/\1.0/')" >> $GITHUB_ENV
+      - name: Build Delta Changelog
+        uses: mikepenz/release-changelog-builder-action@v4
+        id: delta_changelog
+        with:
+          configuration: .github/changelog/delta_changelog.json
+          fromTag: v${{ env.CURRENT_TAG }}
+          toTag: ${{ github.sha }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build Full Changelog
+        uses: mikepenz/release-changelog-builder-action@v4
+        id: full_changelog
+        with:
+          configuration: .github/changelog/full_changelog.json
+          fromTag: v${{ env.CURRENT_MINOR_TAG }}
+          toTag: ${{ github.sha }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create Release
+        uses: ncipollo/release-action@v1
+        with:
+          allowUpdates: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+          prerelease: false
+          name: v${{ env.CURRENT_TAG }}
+          tag: v${{ env.CURRENT_TAG }}
+          removeArtifacts: true
+          body: |
+            ${{ steps.delta_changelog.outputs.changelog }}
+            ${{ steps.full_changelog.outputs.changelog }}
+
   bump-version:
     runs-on: ubuntu-latest
-    needs: publish
     permissions:
       contents: write
     steps:
@@ -24,7 +67,7 @@ jobs:
       - uses: fregante/setup-git-user@v2
       - run: npm version patch --no-git-tag-version
       - run: git add package.json package-lock.json
-      - run: echo "VERSION=$(npm pkg get version | tr -d '\"')" >> $GITHUB_ENV
-      - run: git commit -m 'Bump version to ${{ env.VERSION }}'
-      - run: echo '::notice::Incrementing version to ${{ env.VERSION }}'
+      - run: echo "VERSION=$(${{ env.GET_CURRENT_TAG }})" >> $GITHUB_ENV
+      - run: git commit -m '${{ env.VERSION_TEXT }} ${{ env.VERSION }}'
+      - run: echo '::notice::${{ env.VERSION_TEXT }} ${{ env.VERSION }}'
       - run: git push origin HEAD:${{ github.ref_name }}

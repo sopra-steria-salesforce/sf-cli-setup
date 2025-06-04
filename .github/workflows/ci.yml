@@ -53,6 +53,7 @@ jobs:
       - name: Verify Version Number
         run: |
           if [ "${{ steps.check.outputs.version }}" = "${{ env.VERSION }}" ]; then
+            echo "Version matches: ${{ env.VERSION }}"
             exit 0
           else
             echo "::error::Version mismatch: expected ${{ env.VERSION }}, got ${{ steps.check.outputs.version }}"
