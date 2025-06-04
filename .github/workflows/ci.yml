@@ -40,7 +40,6 @@ jobs:
       - name: Checkout
         id: checkout
         uses: actions/checkout@v4
-      - run: echo "$(npm view @salesforce/cli version)"
       - name: Test Local Action
         id: test-action
         uses: ./
@@ -50,7 +49,7 @@ jobs:
       - name: Check Version Number
         id: check
         run: |
-          echo "version=$(npm view @salesforce/cli version)" >> $GITHUB_OUTPUT
+          echo "version=$(npm list @salesforce/cli --depth=0 --global --json | jq -r '.dependencies["@salesforce/cli"].version')" >> $GITHUB_OUTPUT
       - name: Verify Version Number
         run: |
           if [ "${{ steps.check.outputs.version }}" = "${{ env.VERSION }}" ]; then
