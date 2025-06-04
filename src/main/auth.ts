@@ -32,7 +32,7 @@ export class SalesforceAuth {
     } else if (this.inputs.ACCESS_TOKEN && this.inputs.INSTANCE_URL) {
       this.authenticateAccessToken()
     } else {
-      core.info('No authentication method provided. Skipping authentication.')
+      core.info('No authentication method provided. Skipping authentication, but the SF CLI can still be used.')
     }
   }
 
