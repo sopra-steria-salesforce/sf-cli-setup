@@ -1,5 +1,6 @@
-enhancement: feature/*
+enhancement: ['feature/*', 'enhancement/*']
 bug: ['fix/*', 'bug/*']
+test: test/*
 documentation: docs/*
 refactor: refactor/*
-test: test/*
+dependabot: dependabot/*
