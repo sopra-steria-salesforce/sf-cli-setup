@@ -53,7 +53,8 @@ jobs:
           toTag: ${{ env.CURRENT_TAG }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Create Release
+      - name: Create Release (x.x.x)
+        if: ${{ env.FIRST_MINOR_TAG != env.CURRENT_TAG }}
         uses: ncipollo/release-action@v1
         with:
           allowUpdates: true
@@ -69,7 +70,8 @@ jobs:
 
             ${{ steps.full_changelog.outputs.changelog }}
             </p></details>
-      - name: Create x.x.0 Release
+      - name: Create Release (x.x.0)
+        if: ${{ env.FIRST_MINOR_TAG == env.CURRENT_TAG }}
         uses: ncipollo/release-action@v1
         with:
           allowUpdates: true
