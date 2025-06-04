@@ -28,7 +28,7 @@ export class SalesforceCLI {
   private async start(): Promise<void> {
     if (await this.sfAlreadyInstalled()) {
       this.setOutput(true, 'already-installed')
-      core.info('sf cli already installed and added to path, skipping')
+      core.info('SF CLI already installed and added to path, skipping')
       return
     }
 
