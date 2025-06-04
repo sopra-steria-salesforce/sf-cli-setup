@@ -1,0 +1,12 @@
+name: 'test'
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Update Readme Version Numbers
+        uses: MathieuSoysal/file-updater-for-release@v1.0.3
+        with:
+          files: README.md
+          prefix: sf-cli-setup@
