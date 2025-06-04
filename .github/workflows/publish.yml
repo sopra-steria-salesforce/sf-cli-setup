@@ -56,7 +56,10 @@ jobs:
           removeArtifacts: true
           body: |
             ${{ steps.delta_changelog.outputs.changelog }}
+
+            <details><summary><h2>Changes Since v${{ env.CURRENT_MINOR_TAG }}</h2></summary><p>
             ${{ steps.full_changelog.outputs.changelog }}
+            </p></details>
 
   bump-version:
     runs-on: ubuntu-latest

@@ -25,7 +25,7 @@
       "labels": ["dependabot"]
     }
   ],
-  "template": "\n\n<details><summary><h2>Changes Since </h2></summary><p>#{{CHANGELOG}}</p></details>",
+  "template": "#{{CHANGELOG}}",
   "pr_template": "- #{{TITLE}} ([#{{NUMBER}}](#{{URL}}) — [#{{AUTHOR}}](https://github.com/#{{AUTHOR}}))",
   "base_branches": ["main"]
 }
