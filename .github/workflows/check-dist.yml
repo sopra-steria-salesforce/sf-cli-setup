@@ -22,23 +22,14 @@ jobs:
     name: Check dist/
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        id: checkout
-        uses: actions/checkout@v4
-      - name: Setup Node.js
-        id: setup-node
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version-file: .node-version
           cache: npm
-      - name: Install Dependencies
-        id: install
-        run: npm ci
+      - run: npm ci
       - name: Build dist/ Directory
-        id: build
         run: npm run bundle
-      # This will fail the workflow if the `dist/` directory is different than
-      # expected.
       - name: Compare Directories
         id: diff
         run: |
@@ -52,11 +43,11 @@ jobs:
             git diff --ignore-space-at-eol --text dist/
             exit 1
           fi
+
       # If `dist/` was different than expected, upload the expected version as a
       # workflow artifact.
       - if: ${{ failure() && steps.diff.outcome == 'failure' }}
-        name: Upload Artifact
-        id: upload
+        name: Upload Dist Folder
         uses: actions/upload-artifact@v4
         with:
           name: dist
