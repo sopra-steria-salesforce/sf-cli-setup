@@ -41,6 +41,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Build Full Changelog
+        if: ${{ env.FIRST_MINOR_TAG != env.CURRENT_TAG }}
         uses: mikepenz/release-changelog-builder-action@v4
         id: full_changelog
         with:
@@ -65,6 +66,17 @@ jobs:
 
             ${{ steps.full_changelog.outputs.changelog }}
             </p></details>
+      - name: Create x.x.0 Release
+        uses: ncipollo/release-action@v1
+        with:
+          allowUpdates: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+          prerelease: false
+          name: v${{ env.CURRENT_TAG }}
+          tag: v${{ env.CURRENT_TAG }}
+          removeArtifacts: true
+          body: |
+            ${{ steps.delta_changelog.outputs.changelog }}
 
   bump-version:
     runs-on: ubuntu-latest
