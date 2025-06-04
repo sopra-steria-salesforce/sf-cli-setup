@@ -1,3 +1,4 @@
+// input parameters for the GitHub Actions
 export interface IActionInputs {
   SF_CLI_VERSION: string
   USE_CACHE: boolean
