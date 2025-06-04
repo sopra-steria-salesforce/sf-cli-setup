@@ -27,11 +27,7 @@ export class SalesforceAuth {
   private start(): void {
     if (this.inputs.AUTH_URL) {
       this.authenticateAuthUrl()
-    } else if (
-      this.inputs.USERNAME &&
-      this.inputs.CLIENT_ID &&
-      this.inputs.PRIVATE_KEY
-    ) {
+    } else if (this.inputs.USERNAME && this.inputs.CLIENT_ID && this.inputs.PRIVATE_KEY) {
       this.authenticateJwt()
     } else if (this.inputs.ACCESS_TOKEN && this.inputs.INSTANCE_URL) {
       this.authenticateAccessToken()
@@ -40,9 +36,7 @@ export class SalesforceAuth {
 
   private async authenticateAuthUrl(): Promise<void> {
     fs.writeFileSync('/tmp/sfdx_auth.txt', this.inputs.AUTH_URL)
-    await this.authenticate('sf org login sfdx-url', [
-      '--sfdx-url-file /tmp/sfdx_auth.txt'
-    ])
+    await this.authenticate('sf org login sfdx-url', ['--sfdx-url-file /tmp/sfdx_auth.txt'])
     await execute('rm -rf /tmp/sfdx_auth.txt')
   }
 
@@ -59,16 +53,10 @@ export class SalesforceAuth {
   }
 
   private async authenticateAccessToken(): Promise<void> {
-    await this.authenticate(
-      `echo ${this.inputs.ACCESS_TOKEN} | sf org login access-token`,
-      ['--no-prompt']
-    )
+    await this.authenticate(`echo ${this.inputs.ACCESS_TOKEN} | sf org login access-token`, ['--no-prompt'])
   }
 
-  private async authenticate(
-    type: string,
-    parameters: string[]
-  ): Promise<void> {
+  private async authenticate(type: string, parameters: string[]): Promise<void> {
     await execute(
       `${type} ${parameters.join(' ')} ${this.alias} ${this.defaultDevhub} ${this.defaultOrg} ${this.instanceUrl}`
     )
@@ -84,8 +72,6 @@ export class SalesforceAuth {
     return this.inputs.SET_DEFAULT_ORG ? '--set-default' : ''
   }
   get instanceUrl(): string {
-    return this.inputs.INSTANCE_URL
-      ? `--instance-url ${this.inputs.INSTANCE_URL}`
-      : ''
+    return this.inputs.INSTANCE_URL ? `--instance-url ${this.inputs.INSTANCE_URL}` : ''
   }
 }
