@@ -49,7 +49,7 @@ jobs:
       - name: Check Version Number
         id: check
         run: |
-          echo "version=$(npm list @salesforce/cli --depth=0 --global --json | jq -r '.dependencies["@salesforce/cli"].version')" >> $GITHUB_OUTPUT
+          echo "version=$(sf -v | awk -F'/' '{print $3}' | awk '{print $1}')" >> $GITHUB_OUTPUT
       - name: Verify Version Number
         run: |
           if [ "${{ steps.check.outputs.version }}" = "${{ env.VERSION }}" ]; then
