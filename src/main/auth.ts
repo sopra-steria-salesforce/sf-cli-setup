@@ -31,6 +31,8 @@ export class SalesforceAuth {
       this.authenticateJwt()
     } else if (this.inputs.ACCESS_TOKEN && this.inputs.INSTANCE_URL) {
       this.authenticateAccessToken()
+    } else {
+      core.info('No authentication method provided. Skipping authentication.')
     }
   }
 
