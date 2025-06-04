@@ -30,7 +30,7 @@
     "lint": "npx eslint .",
     "local-action": "npx @github/local-action . src/main.ts .env",
     "local-action:post": "npx @github/local-action . src/cache/save.ts .env",
-    "package": "ncc build src/index.ts --license licenses.txt --minify && ncc build src/cache/save.ts --out dist/cache-save --minify",
+    "package": "npx rollup --config rollup.config.ts --configPlugin @rollup/plugin-typescript",
     "all": "npm run format:write && npm run lint && npm run coverage && npm run package"
   },
   "license": "MIT",
@@ -44,11 +44,14 @@
   "devDependencies": {
     "@eslint/compat": "^1.2.9",
     "@github/local-action": "^3.2.1",
+    "@rollup/plugin-commonjs": "^28.0.1",
+    "@rollup/plugin-json": "^6.1.0",
+    "@rollup/plugin-node-resolve": "^16.0.1",
+    "@rollup/plugin-typescript": "^12.1.1",
     "@types/node": "^20.*.*",
     "@typescript-eslint/eslint-plugin": "^8.33.1",
     "@typescript-eslint/parser": "^8.33.1",
     "eslint": "^9.28.0",
-    "@vercel/ncc": "^0.38.3",
     "eslint-config-prettier": "^10.1.5",
     "eslint-import-resolver-typescript": "^4.4.2",
     "eslint-plugin-import": "^2.31.0",
@@ -56,6 +59,8 @@
     "make-coverage-badge": "^1.2.0",
     "prettier": "^3.5.3",
     "prettier-eslint": "^16.4.2",
+    "rollup": "^4.41.0",
+    "rollup-plugin-license": "^3.6.0",
     "typescript": "^5.8.3"
   }
 }
