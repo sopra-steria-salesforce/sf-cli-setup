@@ -36,13 +36,6 @@ export default {
         }
       }
     ],
-    [
-      '@semantic-release/npm',
-      {
-        npmPublish: true,
-        tarballDir: 'build'
-      }
-    ],
     '@semantic-release/github'
   ]
 }
