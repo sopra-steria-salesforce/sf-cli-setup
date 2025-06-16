@@ -49,7 +49,7 @@
     "@rollup/plugin-typescript": "^12.1.2",
     "@semantic-release/exec": "^7.1.0",
     "@types/node": "^20.*.*",
-    "@typescript-eslint/eslint-plugin": "^8.34.0",
+    "@typescript-eslint/eslint-plugin": "^8.34.1",
     "@typescript-eslint/parser": "^8.34.0",
     "branch-name-lint": "^3.0.1",
     "eslint": "^9.29.0",
