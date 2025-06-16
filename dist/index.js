@@ -1,4 +1,4 @@
-import { r as requireSemver, a as requireCore, b as requireIo, c as requireLib, d as requireExec, e as commonjsGlobal, f as coreExports, p as primaryKey, g as cacheExports, h as cachePaths, i as getInputs, O as Outputs } from './constants-CLgSKtUk.js';
+import { r as requireSemver, a as requireCore, b as requireIo, c as requireLib, d as requireExec, e as commonjsGlobal, f as coreExports, p as primaryKey, g as cacheExports, h as cachePaths, i as getInputs, O as Outputs } from './constants-Ct4AkKPY.js';
 import require$$0$1 from 'crypto';
 import fs__default from 'fs';
 import require$$0 from 'os';
@@ -9,6 +9,7 @@ import require$$0$2 from 'stream';
 import require$$0__default from 'util';
 import require$$0$3 from 'assert';
 import 'url';
+import 'node:crypto';
 import 'node:os';
 import 'node:util';
 import 'node:process';

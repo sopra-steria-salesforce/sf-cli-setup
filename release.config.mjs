@@ -36,6 +36,18 @@ export default {
         }
       }
     ],
-    '@semantic-release/github'
+    '@semantic-release/github',
+    [
+      '@semantic-release/exec',
+      {
+        successCmd: `
+          echo "Tag is: \${nextRelease.gitTag}"
+          git tag -f \$(echo \${nextRelease.gitTag} | cut -d. -f1)
+          git tag -f \$(echo \${nextRelease.gitTag} | cut -d. -f1-2)
+          git push origin \$(echo \${nextRelease.gitTag} | cut -d. -f1) --force
+          git push origin \$(echo \${nextRelease.gitTag} | cut -d. -f1-2) --force
+        `
+      }
+    ]
   ]
 }
