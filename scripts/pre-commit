@@ -1,5 +1,7 @@
 #!/bin/sh
 
+npx branch-name-lint branch.config.json
+
 echo "Running 'npm run bundle'"
 
 stash_commit="$(git stash create)"
