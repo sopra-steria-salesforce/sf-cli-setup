@@ -1,4 +1,4 @@
-import { r as requireSemver, a as requireCore, b as requireIo, c as requireLib, d as requireExec, e as commonjsGlobal, f as coreExports, p as primaryKey, g as cacheExports, h as cachePaths, i as getInputs, O as Outputs } from './constants-Ct4AkKPY.js';
+import { r as requireSemver, a as requireCore, b as requireIo, c as requireLib, d as requireExec, e as commonjsGlobal, f as coreExports, p as primaryKey, g as cacheExports, h as cachePaths, i as getInputs, O as Outputs } from './constants-BocRXqpR.js';
 import require$$0$1 from 'crypto';
 import fs__default from 'fs';
 import require$$0 from 'os';
@@ -22,7 +22,6 @@ import 'tls';
 import 'tty';
 import 'http';
 import 'https';
-import 'events';
 import 'buffer';
 import 'querystring';
 import 'stream/web';
@@ -33,7 +32,6 @@ import 'util/types';
 import 'async_hooks';
 import 'console';
 import 'zlib';
-import 'string_decoder';
 import 'diagnostics_channel';
 import 'timers';
 
