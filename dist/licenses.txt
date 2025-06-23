@@ -21,9 +21,9 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 ---
 
 Name: sf-cli-setup
-Version: null
+Version: 1.0.0
 License: MIT
-Private: false
+Private: true
 Description: Setup sf cli in GitHub Actions
 Repository: git+https://github.com/sopra-steria-salesforce/sf-cli-setup.git
 Author: sopra-steria-salesforce
