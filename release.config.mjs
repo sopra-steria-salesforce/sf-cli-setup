@@ -11,10 +11,10 @@ export default {
         releaseRules: [
           { type: 'breaking', release: 'major' },
           { type: 'feature', release: 'minor' },
-          { type: 'refactor', release: 'minor' },
+          { type: 'refactor', release: 'patch' },
           { type: 'fix', release: 'patch' },
-          { type: 'ci', release: 'patch' },
           { type: 'dependabot', release: 'patch' },
+          { type: 'ci', release: false },
           { type: 'test', release: false },
           { type: 'docs', release: false }
         ]
