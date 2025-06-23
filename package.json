@@ -1,6 +1,6 @@
 {
   "name": "sf-cli-setup",
-  "version": "1.0.7",
+  "version": "1.0.0",
   "private": true,
   "description": "Setup sf cli in GitHub Actions",
   "type": "module",
