@@ -953,13 +953,8 @@ var toolCacheExports = requireToolCache();
 const getCachedSfCli = async () => {
     coreExports.info(`Checking for SF CLI with version ${primaryKey} in GitHub cache...`);
     const cacheKey = await cacheExports.restoreCache(cachePaths, primaryKey);
-    if (cacheKey) {
-        coreExports.info(`Cache restored (key: ${cacheKey})`);
-        // Return the path where cache was restored (includes version in the path)
-        return `${cachePaths[0]}/${primaryKey.split('@')[1]}/x64`;
-    }
-    coreExports.info('Cache not found, will download from npm.');
-    return undefined;
+    coreExports.info(cacheKey ? `Cache restored (key: ${cacheKey})` : 'Cache not found, will download from npm.');
+    return toolCacheExports.find('sf-cli', primaryKey);
 };
 
 var ioExports = requireIo();
