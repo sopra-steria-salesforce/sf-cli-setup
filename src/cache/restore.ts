@@ -8,6 +8,5 @@ export const getCachedSfCli = async (): Promise<string | void> => {
 
   const cacheKey = await cache.restoreCache(cachePaths, primaryKey)
   core.info(cacheKey ? `Cache restored (key: ${cacheKey})` : 'Cache not found, will download from npm.')
-
   return tc.find('sf-cli', primaryKey)
 }
