@@ -953,7 +953,7 @@ var toolCacheExports = requireToolCache();
 const getCachedSfCli = async () => {
     coreExports.info(`Checking for SF CLI with version ${primaryKey} in GitHub cache...`);
     const cacheKey = await cacheExports.restoreCache(cachePaths, primaryKey);
-    coreExports.info(cacheKey ? `Cache restored (key: ${cacheKey})` : 'Cache not found, will download from npm.');
+    coreExports.info(cacheKey ? `Cache restored (key: ${cacheKey})` : 'Cache not found, will download from npm');
     return toolCacheExports.find('sf-cli', primaryKey);
 };
 
